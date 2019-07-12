@@ -5,8 +5,7 @@ import javax.swing.JFrame;
 import gui.FatalError;
 
 public enum RummyDialogs {
-
-	ITSELF("Reopen", true, RummyFrame.class), // TEMP
+	
 	END("Exit", true, null);
 	
 	private String title;

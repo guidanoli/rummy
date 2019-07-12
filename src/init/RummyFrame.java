@@ -21,7 +21,7 @@ public class RummyFrame extends JFrame implements RummyDisposeListener {
 	
 	public RummyFrame() {
 		setTitle("Rummy");
-		setMinimumSize(new Dimension(150,50));
+		setMinimumSize(new Dimension(150,75));
 		getContentPane().add(new RummyPanel(this));
 		setLocationRelativeTo(null); // centres
 		pack();

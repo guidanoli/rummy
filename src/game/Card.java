@@ -18,9 +18,17 @@ public class Card {
 					getSuit().toString()
 				);
 	}
+	public int compareRanks(Card card) {
+		return getRank().compare(card.getRank());
+	}
+	public boolean equalSuits(Card card) {
+		return getSuit().equals(card.getSuit());
+	}
+	public boolean equalRanks(Card card) {
+		return getRank().equals(card.getRank());
+	}
 	public boolean equals(Card card) {
-		return 	getRank().equals(card.getRank()) &&
-				getSuit().equals(card.getSuit());
+		return equalRanks(card) && equalSuits(card);
 	}
 	public boolean isNeighbor(Card card) {
 		return	(getSuit().equals(card.getSuit()) &&
