@@ -24,7 +24,7 @@ public enum CardRank {
 		this.name = name;
 	}
 	
-	public int getRank() { return rank; }
+	public int getIndex() { return rank; }
 	public String toString() { return name; }
 	public boolean equals(CardRank cardRank) {
 		assert cardRank != null;
@@ -32,11 +32,11 @@ public enum CardRank {
 	}
 	public boolean isNeighbor(CardRank cardRank) {
 		assert cardRank != null;
-		return Math.abs(getRank()-cardRank.getRank()) == 1;
+		return Math.abs(getIndex()-cardRank.getIndex()) == 1;
 	}
 	public int compare(CardRank anotherCardRank) {
 		assert anotherCardRank != null;
-		return getRank() - anotherCardRank.getRank();
+		return getIndex() - anotherCardRank.getIndex();
 	}
 	
 }

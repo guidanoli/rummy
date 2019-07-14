@@ -16,29 +16,19 @@ class CardRankTest {
 	class toStringTest {
 		
 		@Test
-		@DisplayName("for one card rank")
-		void testCardNames() {
-			assertAll(
-					"should return its name properly",
-					() -> CardRank.ACE.toString().equals("Ace"),
-					() -> CardRank.TWO.toString().equals("Two"),
-					() -> CardRank.THREE.toString().equals("Three"),
-					() -> CardRank.FOUR.toString().equals("Four"),
-					() -> CardRank.FIVE.toString().equals("Five"),
-					() -> CardRank.SIX.toString().equals("Six"),
-					() -> CardRank.SEVEN.toString().equals("Seven"),
-					() -> CardRank.EIGHT.toString().equals("Eight"),
-					() -> CardRank.NINE.toString().equals("Nine"),
-					() -> CardRank.TEN.toString().equals("Ten"),
-					() -> CardRank.JACK.toString().equals("Jack"),
-					() -> CardRank.QUEEN.toString().equals("Queen"),
-					() -> CardRank.KING.toString().equals("King")
-					);
+		@DisplayName("for any card rank")
+		void testCardRanksNames() {
+			String [] expectedNames = {"Ace", "Two", "Three", "Four", "Five", "Six",
+					"Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"};
+			String [] actualNames = new String[cardRanks.length];
+			for( int i = 0 ; i < cardRanks.length; i++ ) actualNames[i] = cardRanks[i].toString();
+			assertArrayEquals(expectedNames, actualNames,
+					() -> "should return its proper name");
 		}
 		
 		@Test
 		@DisplayName("for any two different card ranks")
-		void testCardNamesAreUnique() {
+		void testCardRanksNamesAreUnique() {
 			for( int i = 0 ; i < cardRanks.length; i++ ) {
 				for( int j = i + 1 ; j < cardRanks.length; j++ ) {
 					assertNotEquals(cardRanks[j].toString(), cardRanks[i].toString(),
@@ -50,7 +40,7 @@ class CardRankTest {
 	}
 	
 	@Nested
-	@DisplayName("the getRank method")
+	@DisplayName("the getIndex method")
 	class getRankTest {
 		
 		@Test
@@ -58,7 +48,7 @@ class CardRankTest {
 		void testCardRanksAreUnique() {
 			for( int i = 0 ; i < cardRanks.length; i++ ) {
 				for( int j = i + 1 ; j < cardRanks.length; j++ ) {
-					assertNotEquals(cardRanks[j].getRank(), cardRanks[i].getRank(),
+					assertNotEquals(cardRanks[j].getIndex(), cardRanks[i].getIndex(),
 							() -> "should output different rank identifiers");
 				}
 			}
@@ -134,15 +124,21 @@ class CardRankTest {
 		
 	}
 	
-	@Test
+	@Nested
 	@DisplayName("the compare method")
-	void testCompare() {
-		for( int i = 0 ; i < cardRanks.length; i++ ) {
-			for( int j = 0 ; j < cardRanks.length; j++ ) {
-				assertEquals( cardRanks[i].compare(cardRanks[j]), i - j,
-						() -> "should return the difference between two cards");
+	class compareTest {
+		
+		@Test
+		@DisplayName("for any two card ranks")
+		void testCompare() {
+			for( int i = 0 ; i < cardRanks.length; i++ ) {
+				for( int j = 0 ; j < cardRanks.length; j++ ) {
+					assertEquals( cardRanks[i].compare(cardRanks[j]), i - j,
+							() -> "should return the difference between them");
+				}
 			}
 		}
+		
 	}
 	
 }
