@@ -1,5 +1,7 @@
 package game;
 
+import java.util.Objects;
+
 public enum CardSuit {
 
 	HEARTS(0, "Hearts"),
@@ -12,7 +14,8 @@ public enum CardSuit {
 	
 	CardSuit(int index, String name) {
 		this.index = index;
-		this.name = name;
+		this.name = Objects.requireNonNull(name,
+				() -> "Null name is not accepted");
 	}
 	
 	public int getIndex() { return index; }

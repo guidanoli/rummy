@@ -1,13 +1,17 @@
 package game;
 
+import java.util.Objects;
+
 public class Card {
 
 	private CardRank rank;
 	private CardSuit suit;
 	
 	public Card(CardRank rank, CardSuit suit) {
-		this.rank = rank;
-		this.suit = suit;
+		this.rank = Objects.requireNonNull(rank,
+				() -> "Null rank is not accepted");
+		this.suit = Objects.requireNonNull(suit,
+				() -> "Null suit is not accepted");
 	}
 	
 	public CardRank getRank() { return rank; }

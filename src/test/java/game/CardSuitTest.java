@@ -13,7 +13,7 @@ class CardSuitTest {
 	
 	@Nested
 	@DisplayName("the toString method")
-	class toStringTest {
+	class ToStringTest {
 		
 		@Test
 		@DisplayName("for any card suit")
@@ -40,7 +40,7 @@ class CardSuitTest {
 	
 	@Nested
 	@DisplayName("the getIndex method")
-	class getRankTest {
+	class GetRankTest {
 		
 		@Test
 		@DisplayName("for any two different card suits")
@@ -57,7 +57,7 @@ class CardSuitTest {
 	
 	@Nested
 	@DisplayName("the equals method")
-	class equalsTest {
+	class EqualsTest {
 
 		@Test
 		@DisplayName("for the same card suit")

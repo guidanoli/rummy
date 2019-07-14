@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 class CardRankTest {
 
 	private static final CardRank [] cardRanks = CardRank.values();
-		
+	
 	@Nested
 	@DisplayName("the toString method")
-	class toStringTest {
+	class ToStringTest {
 		
 		@Test
 		@DisplayName("for any card rank")
@@ -41,7 +41,7 @@ class CardRankTest {
 	
 	@Nested
 	@DisplayName("the getIndex method")
-	class getRankTest {
+	class GetRankTest {
 		
 		@Test
 		@DisplayName("for any two different card ranks")
@@ -58,7 +58,7 @@ class CardRankTest {
 	
 	@Nested
 	@DisplayName("the equals method")
-	class equalsTest {
+	class EqualsTest {
 
 		@Test
 		@DisplayName("for the same card rank")
@@ -82,7 +82,7 @@ class CardRankTest {
 	
 	@Nested
 	@DisplayName("the isNeighbor method")
-	class isNeighborTest {
+	class IsNeighborTest {
 		
 		@Test
 		@DisplayName("for the same card rank")
@@ -103,8 +103,8 @@ class CardRankTest {
 		}
 		
 		@Test
-		@DisplayName("for the first and last card ranks")
-		void testNoWrapNeighbor() {
+		@DisplayName("for ace and king ranks")
+		void testNoWrapAce() {
 			assertFalse(cardRanks[0].isNeighbor(cardRanks[cardRanks.length-1]),
 					() -> "should return false");
 		}
@@ -126,7 +126,7 @@ class CardRankTest {
 	
 	@Nested
 	@DisplayName("the compare method")
-	class compareTest {
+	class CompareTest {
 		
 		@Test
 		@DisplayName("for any two card ranks")

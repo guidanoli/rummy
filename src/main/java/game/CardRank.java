@@ -1,5 +1,7 @@
 package game;
 
+import java.util.Objects;
+
 public enum CardRank {
 
 	ACE(1, "Ace"),
@@ -16,15 +18,16 @@ public enum CardRank {
 	QUEEN(12, "Queen"),
 	KING(13, "King");
 	
-	private int rank;
+	private int index;
 	private String name;
 	
-	CardRank(int rank, String name) {
-		this.rank = rank;
-		this.name = name;
+	CardRank(int index, String name) {
+		this.index = index;
+		this.name = Objects.requireNonNull(name,
+				() -> "Null name is not accepted");
 	}
 	
-	public int getIndex() { return rank; }
+	public int getIndex() { return index; }
 	public String toString() { return name; }
 	public boolean equals(CardRank cardRank) {
 		assert cardRank != null;
