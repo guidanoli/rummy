@@ -27,12 +27,15 @@ public enum CardRank {
 	public int getRank() { return rank; }
 	public String toString() { return name; }
 	public boolean equals(CardRank cardRank) {
+		assert cardRank != null;
 		return compare(cardRank) == 0;
 	}
 	public boolean isNeighbor(CardRank cardRank) {
+		assert cardRank != null;
 		return Math.abs(getRank()-cardRank.getRank()) == 1;
 	}
 	public int compare(CardRank anotherCardRank) {
+		assert anotherCardRank != null;
 		return getRank() - anotherCardRank.getRank();
 	}
 	
