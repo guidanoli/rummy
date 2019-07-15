@@ -54,6 +54,8 @@ public abstract class CardSequence {
 	public final boolean equals(CardSequence anotherCardSequence) {
 		Iterator<Card> iterator = Objects.requireNonNull(getSequenceIterator(),
 				() -> "Cannot iterate over sequence because iterator is null");
+		anotherCardSequence = Objects.requireNonNull(anotherCardSequence,
+				() -> "Cannot iterate over sequence because it is null");
 		Iterator<Card> anotherIterator = Objects.requireNonNull(anotherCardSequence.getSequenceIterator(),
 				() -> "Cannot iterate over sequence because iterator is null");
 		while( iterator.hasNext() ) {
