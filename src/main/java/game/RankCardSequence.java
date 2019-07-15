@@ -9,34 +9,6 @@ public class RankCardSequence extends CardSequence {
 	public RankCardSequence(CardSequenceListener cardSequenceListener) {
 		super(cardSequenceListener);
 	}
-
-	/**
-	 * Overwrites {@link CardSequence#getRemovableCards()} because
-	 * it can be optimised for {@link RankCardSequence}. For the
-	 * {@link LinkedList} implementation, the {@link LinkedList#get(int)}
-	 * method has time complexity of O(n), so using a proper index
-	 * much more efficient.
-	 */
-	public Set<Card> getRemovableCards() {
-		Set<Card> removableCards = new HashSet<Card>();
-		Iterator<Card> iterator = removableCards.iterator();
-		int index = 0, size = sequence.size();
-		// sequences of size 3 don't have removable cards
-		if( size > 3 ) {
-			while( iterator.hasNext() ) {
-				Card card = iterator.next();
-				if( index > 2 && index < size - 3 ||
-					index == 0 || index == size - 1 ) {
-					removableCards.add(card);
-					// either from the beginning
-					// or from the end
-					// or from the middle
-				}
-				index++;
-			}
-		}
-		return removableCards;
-	}
 	
 	protected void add(Card card) {
 		sequence.add(card);
@@ -52,7 +24,7 @@ public class RankCardSequence extends CardSequence {
 			return true;
 		}
 		if( !sequence.contains(card) && // contains(Object) makes use of equals
-			(first.isNeighbor(card) || last.isNeighbor(card)) ) {
+			(first.isNeighbour(card) || last.isNeighbour(card)) ) {
 			return true; // card is in one of the corners
 		}
 		return false;
@@ -70,6 +42,10 @@ public class RankCardSequence extends CardSequence {
 					index == size - 1;
 		}
 		return false;
+	}
+
+	protected Iterator<Card> getSequenceIterator() {
+		return sequence.iterator();
 	}
 
 }

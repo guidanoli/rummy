@@ -34,9 +34,9 @@ public class Card {
 	public boolean equals(Card card) {
 		return equalRanks(card) && equalSuits(card);
 	}
-	public boolean isNeighbor(Card card) {
+	public boolean isNeighbour(Card card) {
 		return	(getSuit().equals(card.getSuit()) &&
-				getRank().isNeighbor(card.getRank()))
+				getRank().isNeighbour(card.getRank()))
 				||
 				(getRank().equals(card.getRank()) &&
 				!getSuit().equals(card.getSuit()));

@@ -175,20 +175,20 @@ class CardTest {
 	}
 	
 	@Nested
-	@DisplayName("the isNeighbor method")
-	class IsNeighborTest {
+	@DisplayName("the isNeighbour method")
+	class IsNeighbourTest {
 		
 		@Test
-		@DisplayName("when comparing two cards of the same neighborhood")
-		void testNeighborhood() {
+		@DisplayName("when comparing two cards of the same neighbourhood")
+		void testNeighbourhood() {
 			Card targetCard = new Card(CardRank.SEVEN, CardSuit.SPADES);
 			assertAll(
 					"should return true",
-					() -> assertTrue(targetCard.isNeighbor(new Card(CardRank.SIX,CardSuit.SPADES))),
-					() -> assertTrue(targetCard.isNeighbor(new Card(CardRank.EIGHT,CardSuit.SPADES))),
-					() -> assertTrue(targetCard.isNeighbor(new Card(CardRank.SEVEN,CardSuit.CLUBS))),
-					() -> assertTrue(targetCard.isNeighbor(new Card(CardRank.SEVEN,CardSuit.DIAMONDS))),
-					() -> assertTrue(targetCard.isNeighbor(new Card(CardRank.SEVEN,CardSuit.HEARTS)))
+					() -> assertTrue(targetCard.isNeighbour(new Card(CardRank.SIX,CardSuit.SPADES))),
+					() -> assertTrue(targetCard.isNeighbour(new Card(CardRank.EIGHT,CardSuit.SPADES))),
+					() -> assertTrue(targetCard.isNeighbour(new Card(CardRank.SEVEN,CardSuit.CLUBS))),
+					() -> assertTrue(targetCard.isNeighbour(new Card(CardRank.SEVEN,CardSuit.DIAMONDS))),
+					() -> assertTrue(targetCard.isNeighbour(new Card(CardRank.SEVEN,CardSuit.HEARTS)))
 					);
 		}
 		
@@ -196,7 +196,7 @@ class CardTest {
 		@DisplayName("when comparing a card with itself")
 		void testSameCard() {
 			Card targetCard = new Card(CardRank.SEVEN, CardSuit.SPADES);
-			assertFalse(targetCard.isNeighbor(targetCard),
+			assertFalse(targetCard.isNeighbour(targetCard),
 					() -> "should return false");
 		}
 		
@@ -204,7 +204,7 @@ class CardTest {
 		@DisplayName("when comparing ace with king of same suit")
 		void testNoWrapAce() {
 			assertFalse(new Card(CardRank.ACE, CardSuit.SPADES)
-					.isNeighbor(new Card(CardRank.KING, CardSuit.SPADES)),
+					.isNeighbour(new Card(CardRank.KING, CardSuit.SPADES)),
 					() -> "should return false");
 		}
 		

@@ -40,11 +40,11 @@ class CardSuitTest {
 	
 	@Nested
 	@DisplayName("the getIndex method")
-	class GetRankTest {
+	class GetIndexTest {
 		
 		@Test
 		@DisplayName("for any two different card suits")
-		void testCardRanksAreUnique() {
+		void testCardSuitIndexesAreUnique() {
 			for( int i = 0 ; i < cardSuits.length; i++ ) {
 				for( int j = i + 1 ; j < cardSuits.length; j++ ) {
 					assertNotEquals(cardSuits[j].getIndex(), cardSuits[i].getIndex(),

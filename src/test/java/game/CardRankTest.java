@@ -41,11 +41,11 @@ class CardRankTest {
 	
 	@Nested
 	@DisplayName("the getIndex method")
-	class GetRankTest {
+	class GetIndexTest {
 		
 		@Test
 		@DisplayName("for any two different card ranks")
-		void testCardRanksAreUnique() {
+		void testCardRankIndexesAreUnique() {
 			for( int i = 0 ; i < cardRanks.length; i++ ) {
 				for( int j = i + 1 ; j < cardRanks.length; j++ ) {
 					assertNotEquals(cardRanks[j].getIndex(), cardRanks[i].getIndex(),
@@ -81,23 +81,23 @@ class CardRankTest {
 	}
 	
 	@Nested
-	@DisplayName("the isNeighbor method")
-	class IsNeighborTest {
+	@DisplayName("the isNeighbour method")
+	class IsNeighbourTest {
 		
 		@Test
 		@DisplayName("for the same card rank")
-		void testIsItsOwnNeighbor() {
+		void testIsItsOwnNeighbour() {
 			for( CardRank cardRank : cardRanks ) {
-				assertFalse(cardRank.isNeighbor(cardRank),
+				assertFalse(cardRank.isNeighbour(cardRank),
 						() -> "should return false");
 			}
 		}
 		
 		@Test
 		@DisplayName("for any two adjacent card ranks")
-		void testIsAnothersNeighbor() {
+		void testIsAnothersNeighbour() {
 			for( int i = 0 ; i < cardRanks.length - 1; i++ ) {
-				assertTrue(cardRanks[i].isNeighbor(cardRanks[i+1]),
+				assertTrue(cardRanks[i].isNeighbour(cardRanks[i+1]),
 						() -> "should return true");
 			}
 		}
@@ -105,7 +105,7 @@ class CardRankTest {
 		@Test
 		@DisplayName("for ace and king ranks")
 		void testNoWrapAce() {
-			assertFalse(cardRanks[0].isNeighbor(cardRanks[cardRanks.length-1]),
+			assertFalse(cardRanks[0].isNeighbour(cardRanks[cardRanks.length-1]),
 					() -> "should return false");
 		}
 		
@@ -114,8 +114,8 @@ class CardRankTest {
 		void testIsBidirectional() {
 			for( int i = 0 ; i < cardRanks.length; i++ ) {
 				for( int j = 0 ; j < cardRanks.length; j++ ) {
-					assertEquals( cardRanks[i].isNeighbor(cardRanks[j]),
-							cardRanks[j].isNeighbor(cardRanks[i]),
+					assertEquals( cardRanks[i].isNeighbour(cardRanks[j]),
+							cardRanks[j].isNeighbour(cardRanks[i]),
 							() -> "should have the same return value both ways"
 					);
 				}
