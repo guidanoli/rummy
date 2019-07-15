@@ -1,8 +1,5 @@
 language: java
 
-jdk:
-  - openjdk11
-
 sudo: false
 
 script: mvn test -B
