@@ -67,6 +67,17 @@ public abstract class CardSequence {
 		return !anotherIterator.hasNext();
 	}
 	
+	protected final boolean hasValidState() {
+		Iterator<Card> iterator = getSequenceIterator();
+		Card prev = null, curr = null;
+		while( iterator.hasNext() ) {
+			curr = iterator.next();
+			if( curr == null || (prev != null && !areSequential(prev,curr)) ) return false;
+			prev = curr;
+		}
+		return true;
+	}
+	
 	/* Abstract methods */
 	
 	protected abstract boolean canAdd(Card card);
@@ -74,5 +85,6 @@ public abstract class CardSequence {
 	protected abstract boolean canRemove(Card card);
 	protected abstract void remove(Card card);
 	protected abstract Iterator<Card> getSequenceIterator();
+	protected abstract boolean areSequential(Card first, Card second);
 	
 }
