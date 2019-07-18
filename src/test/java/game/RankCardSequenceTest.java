@@ -213,15 +213,15 @@ class RankCardSequenceTest implements CardSequenceListener {
 			Iterator<Card> iterator = sequence.getSequenceIterator();
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
-						() -> "it should add three cards exactly");
+						() -> "it should add one card exactly");
 				assertTrue(cards[i].equals(iterator.next()),
-						() -> "the cards should be found on the iterator");
+						() -> "the card should be found on the iterator");
 			}
 		}
 		
 		@Test
-		@DisplayName("when adding two cards")
-		void testAddTwoCards() {
+		@DisplayName("when adding two cards in crescent order")
+		void testAddTwoCardsCrescent() {
 			Card [] cards = { 
 					new Card(CardRank.ACE, CardSuit.SPADES),
 					new Card(CardRank.TWO, CardSuit.SPADES)
@@ -233,7 +233,27 @@ class RankCardSequenceTest implements CardSequenceListener {
 			Iterator<Card> iterator = sequence.getSequenceIterator();
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
-						() -> "it should add three cards exactly");
+						() -> "it should add two cards exactly");
+				assertTrue(cards[i].equals(iterator.next()),
+						() -> "the cards should be found on the iterator");
+			}
+		}
+		
+		@Test
+		@DisplayName("when adding two cards in decrescent order")
+		void testAddTwoCardsDecrescent() {
+			Card [] cards = {
+					new Card(CardRank.TWO, CardSuit.SPADES),
+					new Card(CardRank.ACE, CardSuit.SPADES)
+			};
+			for(int i = 0; i < cards.length; i++) {
+				assertTrue(sequence.addCard(cards[i]),
+						() -> "adds successfully to the sequence");
+			}
+			Iterator<Card> iterator = sequence.getSequenceIterator();
+			for(int i = cards.length - 1; i >= 0; i--) {
+				assertTrue(iterator.hasNext(),
+						() -> "it should add two cards exactly");
 				assertTrue(cards[i].equals(iterator.next()),
 						() -> "the cards should be found on the iterator");
 			}
@@ -324,16 +344,20 @@ class RankCardSequenceTest implements CardSequenceListener {
 		}
 		
 		@Test
-		@DisplayName("when adding five cards and alternating endings")
+		@DisplayName("when adding nine cards and alternating endings")
 		void testAddingAndAlternatingEnds() {
 			Card [] cards = {
 					new Card(CardRank.ACE, CardSuit.SPADES),
 					new Card(CardRank.TWO, CardSuit.SPADES),
 					new Card(CardRank.THREE, CardSuit.SPADES),
 					new Card(CardRank.FOUR, CardSuit.SPADES),
-					new Card(CardRank.FIVE, CardSuit.SPADES)
+					new Card(CardRank.FIVE, CardSuit.SPADES),
+					new Card(CardRank.SIX, CardSuit.SPADES),
+					new Card(CardRank.SEVEN, CardSuit.SPADES),
+					new Card(CardRank.EIGHT, CardSuit.SPADES),
+					new Card(CardRank.NINE, CardSuit.SPADES)
 			};
-			int [] order = {2,1,3,0,4};
+			int [] order = {4,3,5,2,6,1,7,0,8};
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(sequence.addCard(cards[order[i]]),
 						() -> "adds cards successfully to the sequence");
@@ -350,50 +374,76 @@ class RankCardSequenceTest implements CardSequenceListener {
 		}
 		
 		@Test
-		@DisplayName("when adding a card in the middle of a 5+ card sequence")
-		void testAddingInTheMiddle() {
+		@DisplayName("when partitioning the sequence twice")
+		void testDoublePartition() {
 			sequence = new RankCardSequence(this);
 			Card [] cards = {
 					new Card(CardRank.ACE, CardSuit.SPADES),
 					new Card(CardRank.TWO, CardSuit.SPADES),
 					new Card(CardRank.THREE, CardSuit.SPADES),
 					new Card(CardRank.FOUR, CardSuit.SPADES),
-					new Card(CardRank.FIVE, CardSuit.SPADES)
+					new Card(CardRank.FIVE, CardSuit.SPADES),
+					new Card(CardRank.SIX, CardSuit.SPADES),
+					new Card(CardRank.SEVEN, CardSuit.SPADES)
 			};
 			for(int i = 0; i < cards.length; i++) sequence.addCard(cards[i]);
+			assertEquals(cards.length, sequence.size(),
+					() -> "should add all cards");
 			assertEquals(0, addedSequencesQueue.size(),
-					() -> "should not call addCardSequence before adding 6th card");
+					() -> "should not call addCardSequence before adding 8th card");
 			assertEquals(0, removedSequencesQueue.size(),
-					() -> "should not call removeCardSequence before adding 6th card");
+					() -> "should not call removeCardSequence before adding 8th card");
 			assertTrue(sequence.addCard(new Card(CardRank.THREE, CardSuit.SPADES)),
-					() -> "should let the 6th be added in the middle");
+					() -> "should let the 8th card be added in the middle");
 			assertEquals(1, addedSequencesQueue.size(),
-					() -> "should call addCardSequence once after adding 6th card");
+					() -> "should call addCardSequence once after adding 8th card");
 			assertEquals(0, removedSequencesQueue.size(),
-					() -> "should not call removeCardSequence after adding 6th card");
+					() -> "should not call removeCardSequence after adding 8th card");
 			CardSequence cardSequenceCreated = addedSequencesQueue.get(0);
-			assertTrue(cardSequenceCreated.hasValidState(),
-					() -> "should create a card sequence with a valid state");
-			Iterator<Card> 	newIterator = cardSequenceCreated.getSequenceIterator(),
-							iterator = sequence.getSequenceIterator();
-			int new_size = 0, size = 0;
-			while( newIterator.hasNext() ) {
-				new_size++; newIterator.next();
-			}
-			while( iterator.hasNext() ) {
-				size++; iterator.next();
-			}
-			assertEquals(size, new_size,
-					() -> "Card sequences should be of same size");
-		}
 
+			boolean isNewSequenceSmaller = cardSequenceCreated.size() == 3;
+			CardSequence smallerSequence = isNewSequenceSmaller ? cardSequenceCreated : sequence;
+			CardSequence biggerSequence = isNewSequenceSmaller ? sequence : cardSequenceCreated;
+			assertEquals(3, smallerSequence.size(),
+					() -> "should create a sequence with 5 cards after adding 8th card");
+			assertEquals(5, biggerSequence.size(),
+					() -> "should create a sequence with 3 cards after adding 8th card");
+			assertTrue(smallerSequence.hasValidState(),
+					() -> "should create card sequences with a valid state");
+			assertTrue(biggerSequence.hasValidState(),
+					() -> "should create card sequences with a valid state");
+			
+			addedSequencesQueue.clear();
+			assertTrue(biggerSequence.addCard(new Card(CardRank.FIVE, CardSuit.SPADES)),
+					() -> "should let the 9th card be added in the middle of the larger sequence");
+			assertEquals(1, addedSequencesQueue.size(),
+					() -> "should call addCardSequence once after adding 9th card");
+			assertEquals(0, removedSequencesQueue.size(),
+					() -> "should not call removeCardSequence after adding 9th card");
+			cardSequenceCreated = addedSequencesQueue.get(0);
+			assertEquals(cardSequenceCreated.size(),biggerSequence.size(),
+					() -> "Card sequences should be of same size");			
+		}
+		
 		public void addCardSequence(CardSequence cardSequence) {
+			assertNotNull(cardSequence,
+					() -> "Card sequence added should not be null");
 			addedSequencesQueue.add(cardSequence);
 		}
 
 		public void removeCardSequence(CardSequence cardSequence) {
+			assertNotNull(cardSequence,
+					() -> "Card sequence removed should not be null");
 			removedSequencesQueue.add(cardSequence);
 		}
+		
+	}
+	
+	@Nested
+	@DisplayName("the removeCard method")
+	class RemoveCardTest {
+		
+		
 		
 	}
 	

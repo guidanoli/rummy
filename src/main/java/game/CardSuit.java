@@ -39,7 +39,7 @@ public enum CardSuit {
 	public int getIndex() { return index; }
 	
 	/**
-	 * @return string that identifies in text the card suit.
+	 * @return string that identifies the card suit in text.
 	 * Each card suit has its unique name.
 	 */
 	public String toString() { return name; }
