@@ -26,7 +26,7 @@ public class RankCardSequence extends CardSequence {
 			sequence.addLast(card);
 		} else {
 			split(index);
-			sequence.add(index, card);
+			sequence.add(card);
 		}
 	}
 	
@@ -77,23 +77,13 @@ public class RankCardSequence extends CardSequence {
 	 * @return {@code true} if split was successful
 	 */
 	public final boolean split(int index) {
-		if( index <= 0 || index >= size() ) return false;
-		int i = 0;
-		Iterator<Card> iterator = getSequenceIterator();
-		LinkedList<Card> left = new LinkedList<Card>(),
-						right = new LinkedList<Card>();
-		while( iterator.hasNext() ) {
-			Card card = iterator.next();
-			if( i < index ) {
-				left.add(card);
-			} else {
-				right.add(card);
-			}
-			i++;
-		}
-		sequence = left;
+		int size = size();
+		if( index <= 0 || index >= size ) return false;
 		RankCardSequence newSequence = new RankCardSequence(cardSequenceListener);
-		newSequence.sequence = right;
+		for( int i = index; i < size; i++ ) {
+			Card removedCard = sequence.remove(index);
+			newSequence.add(removedCard);
+		}
 		cardSequenceListener.addCardSequence(newSequence);
 		return true;
 	}
