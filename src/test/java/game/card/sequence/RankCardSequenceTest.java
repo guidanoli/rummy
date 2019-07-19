@@ -432,16 +432,20 @@ class RankCardSequenceTest implements CardSequenceListener {
 					() -> "Card sequences should be of same size");			
 		}
 		
-		public void addCardSequence(CardSequence cardSequence) {
+		public void cardSequenceAdded(CardSequence cardSequence) {
 			assertNotNull(cardSequence,
 					() -> "Card sequence added should not be null");
 			addedSequencesQueue.add(cardSequence);
 		}
 
-		public void removeCardSequence(CardSequence cardSequence) {
+		public void cardSequenceRemoved(CardSequence cardSequence) {
 			assertNotNull(cardSequence,
 					() -> "Card sequence removed should not be null");
 			removedSequencesQueue.add(cardSequence);
+		}
+
+		public void cardRemovedFromSequence(Card card) {
+			
 		}
 		
 	}
@@ -454,11 +458,15 @@ class RankCardSequenceTest implements CardSequenceListener {
 		
 	}
 	
-	public void addCardSequence(CardSequence cardSequence) {
+	public void cardSequenceAdded(CardSequence cardSequence) {
 		
 	}
 
-	public void removeCardSequence(CardSequence cardSequence) {
+	public void cardSequenceRemoved(CardSequence cardSequence) {
+		
+	}
+
+	public void cardRemovedFromSequence(Card card) {
 		
 	}
 

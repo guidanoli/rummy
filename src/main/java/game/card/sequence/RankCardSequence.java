@@ -47,16 +47,15 @@ public class RankCardSequence extends CardSequence {
 	}
 
 	protected void remove(Card card) {
+		Card firstCard = sequence.getFirst();
+		int index = card.compareRanks(firstCard);
+		split(index+1);
 		sequence.remove(card);
+		cardSequenceListener.cardRemovedFromSequence(card);
 	}
 	
 	protected boolean canRemove(Card card) {
-		int index = sequence.indexOf(card), size = sequence.size();
-		if( size > 3 ) {
-			return 	(index > 2 && index < size - 3) ||
-					index == 0 || index == size - 1;
-		}
-		return false;
+		return sequence.contains(card);
 	}
 
 	protected Iterator<Card> getSequenceIterator() {
@@ -84,7 +83,7 @@ public class RankCardSequence extends CardSequence {
 			Card removedCard = sequence.remove(index);
 			newSequence.add(removedCard);
 		}
-		cardSequenceListener.addCardSequence(newSequence);
+		cardSequenceListener.cardSequenceAdded(newSequence);
 		return true;
 	}
 	
