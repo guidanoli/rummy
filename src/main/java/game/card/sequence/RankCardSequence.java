@@ -1,6 +1,8 @@
-package game;
+package game.card.sequence;
 
 import java.util.*;
+
+import game.card.Card;
 
 public class RankCardSequence extends CardSequence {
 	

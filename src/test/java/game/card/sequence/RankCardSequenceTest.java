@@ -1,4 +1,4 @@
-package game;
+package game.card.sequence;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,6 +10,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import game.card.Card;
+import game.card.CardRank;
+import game.card.CardSuit;
+import game.card.sequence.CardSequence;
+import game.card.sequence.CardSequenceListener;
+import game.card.sequence.RankCardSequence;
 
 @DisplayName("On the RankCardSequence class")
 class RankCardSequenceTest implements CardSequenceListener {

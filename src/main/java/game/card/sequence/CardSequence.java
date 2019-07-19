@@ -1,9 +1,11 @@
-package game;
+package game.card.sequence;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+
+import game.card.Card;
 
 /**
  * 

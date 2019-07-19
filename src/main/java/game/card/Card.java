@@ -1,6 +1,8 @@
-package game;
+package game.card;
 
 import java.util.Objects;
+
+import game.card.sequence.CardSequence;
 
 /**
  * <p>A card always handles two informations: its <b>suit</b>
@@ -129,5 +131,5 @@ public class Card {
 				(getRank().equals(anotherCard.getRank()) &&
 				!getSuit().equals(anotherCard.getSuit()));
 	}
-	
+		
 }

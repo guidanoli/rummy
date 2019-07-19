@@ -1,10 +1,12 @@
-package game;
+package game.card;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import game.card.CardRank;
 
 @DisplayName("On the CardRank class")
 class CardRankTest {
