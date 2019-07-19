@@ -6,7 +6,7 @@ import game.card.Card;
 
 public class RankCardSequence extends CardSequence {
 	
-	private final LinkedList<Card> sequence = new LinkedList<Card>();
+	private LinkedList<Card> sequence = new LinkedList<Card>();
 	
 	public RankCardSequence(CardSequenceListener cardSequenceListener) {
 		super(cardSequenceListener);
@@ -25,13 +25,8 @@ public class RankCardSequence extends CardSequence {
 		} else if( index >= size ) {
 			sequence.addLast(card);
 		} else {
+			split(index);
 			sequence.add(index, card);
-			RankCardSequence newSequence = new RankCardSequence(cardSequenceListener);
-			for( int i = index; i < size; i++ ) {
-				Card removedCard = sequence.remove(index+1);
-				newSequence.add(removedCard);
-			}
-			cardSequenceListener.addCardSequence(newSequence);
 		}
 	}
 	
@@ -72,4 +67,35 @@ public class RankCardSequence extends CardSequence {
 		return first.compareRanks(second) == -1;
 	}
 
+	/**
+	 * <p>Splits card sequence into two. One that
+	 * ranges from indexes 0 to index-1 and another
+	 * that ranges from indexes index until the end.
+	 * <p><b>Observation:</b> One cannot split a single-card sequence.
+	 * @param index - index of first card of rightmost
+	 * card sequence (starting from 0)
+	 * @return {@code true} if split was successful
+	 */
+	public final boolean split(int index) {
+		if( index <= 0 || index >= size() ) return false;
+		int i = 0;
+		Iterator<Card> iterator = getSequenceIterator();
+		LinkedList<Card> left = new LinkedList<Card>(),
+						right = new LinkedList<Card>();
+		while( iterator.hasNext() ) {
+			Card card = iterator.next();
+			if( i < index ) {
+				left.add(card);
+			} else {
+				right.add(card);
+			}
+			i++;
+		}
+		sequence = left;
+		RankCardSequence newSequence = new RankCardSequence(cardSequenceListener);
+		newSequence.sequence = right;
+		cardSequenceListener.addCardSequence(newSequence);
+		return true;
+	}
+	
 }

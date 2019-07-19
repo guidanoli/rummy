@@ -141,5 +141,6 @@ public abstract class CardSequence {
 	protected abstract void remove(Card card);
 	protected abstract Iterator<Card> getSequenceIterator();
 	protected abstract boolean areSequential(Card first, Card second);
+	protected abstract boolean split(int index);
 	
 }
