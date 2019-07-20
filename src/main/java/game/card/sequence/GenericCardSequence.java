@@ -157,7 +157,7 @@ public abstract class GenericCardSequence {
 		return hasValidState() && size() >= 3;
 	}
 	
-	protected final boolean hasValidState() {
+	public final boolean hasValidState() {
 		Iterator<Card> iterator = getSequenceIterator();
 		Card prev = null, curr = null;
 		while( iterator.hasNext() ) {
@@ -168,7 +168,7 @@ public abstract class GenericCardSequence {
 		return true;
 	}
 	
-	protected final int size() {
+	public final int size() {
 		int size = 0;
 		Iterator<Card> iterator = getSequenceIterator();
 		while( iterator.hasNext() ) {

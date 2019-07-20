@@ -1,10 +1,12 @@
-package game.card.sequence;
+package game.card.sequence.builders;
 
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
 import game.card.Card;
+import game.card.sequence.CardSequenceListener;
+import game.card.sequence.types.RankCardSequence;
 
 public class RankCardSequenceBuilder implements CardSequenceBuilder<RankCardSequence> {
 

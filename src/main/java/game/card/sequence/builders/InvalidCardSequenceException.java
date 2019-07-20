@@ -1,4 +1,6 @@
-package game.card.sequence;
+package game.card.sequence.builders;
+
+import game.card.sequence.GenericCardSequence;
 
 /**
  * 

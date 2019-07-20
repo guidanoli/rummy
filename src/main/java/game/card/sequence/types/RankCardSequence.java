@@ -1,8 +1,10 @@
-package game.card.sequence;
+package game.card.sequence.types;
 
 import java.util.*;
 
 import game.card.Card;
+import game.card.sequence.CardSequenceListener;
+import game.card.sequence.GenericCardSequence;
 
 public class RankCardSequence extends GenericCardSequence {
 	
