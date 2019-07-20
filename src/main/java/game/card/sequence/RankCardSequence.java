@@ -10,6 +10,7 @@ public class RankCardSequence extends GenericCardSequence {
 		
 	public RankCardSequence() { }
 	public RankCardSequence( CardSequenceListener listener ) { super(listener); }
+	public RankCardSequence( Set<CardSequenceListener> listeners ) { super(listeners); }
 	
 	protected void add(Card card) {
 		if( sequence.isEmpty() ) {
