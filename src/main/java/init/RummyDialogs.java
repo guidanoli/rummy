@@ -24,7 +24,10 @@ public enum RummyDialogs {
 					try {
 						frameObj = frameClass.newInstance();
 					} catch (Exception e) {
-						FatalError.show(e);
+						FatalError.Builder
+						.newInstance()
+						.exception(e)
+						.show();
 					}
 					assert frameObj instanceof JFrame;
 					JFrame frame = (JFrame) frameObj;

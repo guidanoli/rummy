@@ -6,7 +6,6 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -16,14 +15,53 @@ public class FatalError {
 	protected final static String ERROR_MSG_TITLE = "Error";
 	protected final static String ERROR_LOG_TITLE = "Error log";
 	protected final static String ERROR_GENERAL_MSG = "An unhandled error occurred.";
-	protected final static JFrame DEFAULT_PARENT = null;
-	protected final static boolean DEFAULT_EXIT = true;
 	
+	/* Builder */
+	
+	public static class Builder {
+		
+		private Exception exception = null;
+		private String message = null;
+		private Component parent = null;
+		private boolean exit = true;
+		
+		public Builder() {} // can instantiate directly
+		public static Builder newInstance() { return new Builder(); } // or indirectly
+
+		public Builder exception(Exception e) { this.exception = e; message = null; return this; } 
+		public Builder message(String msg) { this.message = msg; exception = null; return this; }
+		public Builder parent(Component parent) { this.parent = parent; return this; }
+		public Builder exit(boolean exit) { this.exit = exit; return this; }	
+		
+		public void show() {
+			if( exception != null ) { // exception
+				FatalError.show(exception, parent, exit);
+			} else if( message != null ) { // or message
+				FatalError.show(message, parent, exit);
+			} // or nothing
+		}
+		
+	}
+	
+	/* Methods */
+	
+	/**
+	 * Show a fatal error message on-screen
+	 * @param msg - message
+	 * @param parent - parent dialog
+	 * @param exit - whether to exit the application afterwards
+	 */
 	public static void show (String msg, Component parent, boolean exit) {
 		JOptionPane.showMessageDialog(parent, msg, ERROR_MSG_TITLE, JOptionPane.ERROR_MESSAGE);
 		if( exit ) System.exit(0);
 	}
 	
+	/**
+	 * Show a fatal error message on-screen as a log
+	 * @param msg - log message
+	 * @param parent - parent dialog
+	 * @param exit - whether to exit the application afterwards
+	 */
 	public static void showLog (String msg, Component parent, boolean exit) {
 		JTextArea txt = new JTextArea(msg);
 		JScrollPane sp = new JScrollPane();
@@ -36,6 +74,12 @@ public class FatalError {
 		if( exit ) System.exit(0);
 	}
 	
+	/**
+	 * Show a fatal error message on-screen
+	 * @param e - exception
+	 * @param parent - parent dialog
+	 * @param exit - whether to exit the application afterwards
+	 */
 	public static void show (Exception e, Component parent, boolean exit) {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		String encoding = "UTF-8";
@@ -58,21 +102,7 @@ public class FatalError {
 	    	showLog(data,parent,false);
 	    if( exit ) System.exit(0);
 	}
-	
-	// SIGNATURE OVERLOAD -- missing exit
-	public static void show (String msg, Component parent) { show(msg,parent,DEFAULT_EXIT); }
-	public static void show (Exception e, Component parent) { show(e,parent,DEFAULT_EXIT); }
-	public static void showScrollPaneMessage (String msg, Component parent) {
-		showLog(msg,parent,DEFAULT_EXIT);
-	}
-	
-	// SIGNATURE OVERLOAD -- missing parent
-	public static void show (String msg) { show(msg,DEFAULT_PARENT); }
-	public static void show (Exception e) { show(e,DEFAULT_PARENT); }
-	public static void showScrollPaneMessage (String msg) {
-		showScrollPaneMessage(msg,DEFAULT_PARENT);
-	}
-	
+		
 	
 }
 
