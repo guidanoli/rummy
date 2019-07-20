@@ -7,10 +7,9 @@ import game.card.Card;
 public class RankCardSequence extends CardSequence {
 	
 	private LinkedList<Card> sequence = new LinkedList<Card>();
-	
-	public RankCardSequence(CardSequenceListener cardSequenceListener) {
-		super(cardSequenceListener);
-	}
+		
+	public RankCardSequence() { }
+	public RankCardSequence( CardSequenceListener listener ) { super(listener); }
 	
 	protected void add(Card card) {
 		if( sequence.isEmpty() ) {
@@ -51,7 +50,7 @@ public class RankCardSequence extends CardSequence {
 		int index = card.compareRanks(firstCard);
 		split(index+1);
 		sequence.remove(card);
-		cardSequenceListener.cardRemovedFromSequence(card);
+		callListener((listener) -> listener.cardRemovedFromSequence(card));
 	}
 	
 	protected boolean canRemove(Card card) {
@@ -78,12 +77,13 @@ public class RankCardSequence extends CardSequence {
 	public final boolean split(int index) {
 		int size = size();
 		if( index <= 0 || index >= size ) return false;
-		RankCardSequence newSequence = new RankCardSequence(cardSequenceListener);
+		RankCardSequence newSequence = new RankCardSequence();
+		newSequence.addListeners(this);
 		for( int i = index; i < size; i++ ) {
 			Card removedCard = sequence.remove(index);
 			newSequence.add(removedCard);
 		}
-		cardSequenceListener.cardSequenceAdded(newSequence);
+		callListener((listener) -> listener.cardSequenceAdded(newSequence));
 		return true;
 	}
 	

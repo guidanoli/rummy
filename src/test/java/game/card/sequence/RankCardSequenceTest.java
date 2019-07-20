@@ -27,37 +27,14 @@ class RankCardSequenceTest implements CardSequenceListener {
 	@BeforeEach
 	void init() {
 		listener = this;
-		sequence = new RankCardSequence(listener);
+		sequence = new RankCardSequence();
+		sequence.addListener(listener);
 	}
 	
 	@AfterEach
 	void end() {
 		assertTrue(sequence.hasValidState(),
 				() -> "the sequence should have a valid state");
-	}
-	
-	@Nested
-	@DisplayName("the constructor")
-	class ConstructorTest {
-		
-		@Test
-		@DisplayName("when parsing a null listener")
-		void testNullListener() {
-			assertThrows(NullPointerException.class,
-					() -> new RankCardSequence(null),
-					() -> "should throw a NullPointerException"
-					);
-		}
-		
-		@Test
-		@DisplayName("when passing an existing listener")
-		void testNonNullListener() {
-			assertDoesNotThrow(
-					() -> new RankCardSequence(listener),
-					() -> "should not throw any exceptions whatsoever"
-					);
-		}
-		
 	}
 	
 	@Nested

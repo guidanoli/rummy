@@ -24,22 +24,67 @@ import game.card.Card;
  */
 public abstract class CardSequence {
 	
-	protected CardSequenceListener cardSequenceListener;
+	private Set<CardSequenceListener> listeners = new HashSet<CardSequenceListener>();
+		
+	/* Constructors */
 	
-	/* Implemented methods */
+	/**
+	 * Constructs a card sequence object
+	 */
+	public CardSequence() {}
 	
 	/**
 	 * Constructs a card sequence object
 	 * @param cardSequenceListener - card sequence listener that will
 	 * receive call backs whenever a new card sequence is created or
-	 * destroyed.
-	 * @throws NullPointerException if listener is {@code null}
+	 * destroyed etc.
 	 */
-	public CardSequence(CardSequenceListener cardSequenceListener) {
-		this.cardSequenceListener = Objects.requireNonNull(cardSequenceListener,
-				() -> "Null cardSequenceListener is not accepted");
+	public CardSequence(CardSequenceListener listener) {
+		addListener(listener);
 	}
 	
+	/**
+	 * Constructs a card sequence object
+	 * @param cardSequenceListener - card sequence listeners that will
+	 * receive call backs whenever a new card sequence is created or
+	 * destroyed etc.
+	 */
+	public CardSequence(Set<CardSequenceListener> listeners) {
+		for( CardSequenceListener listener : listeners ) {
+			addListener(listener);
+		}
+	}
+
+	/* Implemented methods */
+	
+	/**
+	 * Inherits all listeners from one sequence to the other
+	 * @param sequence - sequence to inherit listeners
+	 */
+	protected final void addListeners(CardSequence sequence) {
+		for( CardSequenceListener listener : sequence.listeners ) {
+			addListener(listener);
+		}
+	}
+	
+	/**
+	 * Adds a listener to the card sequence listener set
+	 * @param listener - card sequence listener
+	 */
+	public final void addListener(CardSequenceListener listener) {
+		listeners.add(listener);
+	}
+	
+	/**
+	 * Fires all listeners with a calling message
+	 * @param caller - caller lambda
+	 */
+	protected final void callListener(CardSequenceCaller caller) {
+		for( CardSequenceListener listener : listeners ) {
+			caller.call(listener);
+		}
+	}
+		
 	/**
 	 * Adds a card to the sequence if possible
 	 * @param card - card to be added
