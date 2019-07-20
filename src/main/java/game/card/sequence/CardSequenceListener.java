@@ -4,9 +4,9 @@ import game.card.Card;
 
 public interface CardSequenceListener {
 
-	public void cardSequenceAdded(CardSequence cardSequence);
+	public void cardSequenceAdded(GenericCardSequence cardSequence);
 	
-	public void cardSequenceRemoved(CardSequence cardSequence);
+	public void cardSequenceRemoved(GenericCardSequence cardSequence);
 	
 	public void cardRemovedFromSequence(Card card);
 	

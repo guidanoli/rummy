@@ -2,7 +2,7 @@ package game.card;
 
 import java.util.Objects;
 
-import game.card.sequence.CardSequence;
+import game.card.sequence.GenericCardSequence;
 
 /**
  * <p>A card always handles two informations: its <b>suit</b>
@@ -119,7 +119,7 @@ public class Card {
 	 * @param anotherCard - another card
 	 * @return {@code true} if they can be found side by side
 	 * on a card sequence
-	 * @see CardSequence
+	 * @see GenericCardSequence
 	 * @throws NullPointerException if card provided is {@code null}
 	 */
 	public boolean isNeighbour(Card anotherCard) {

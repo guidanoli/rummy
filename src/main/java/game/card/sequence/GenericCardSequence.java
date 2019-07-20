@@ -22,7 +22,7 @@ import game.card.Card;
  * @author guidanoli
  *
  */
-public abstract class CardSequence {
+public abstract class GenericCardSequence {
 	
 	private Set<CardSequenceListener> listeners = new HashSet<CardSequenceListener>();
 		
@@ -31,7 +31,7 @@ public abstract class CardSequence {
 	/**
 	 * Constructs a card sequence object
 	 */
-	public CardSequence() {}
+	public GenericCardSequence() {}
 	
 	/**
 	 * Constructs a card sequence object
@@ -39,7 +39,7 @@ public abstract class CardSequence {
 	 * receive call backs whenever a new card sequence is created or
 	 * destroyed etc.
 	 */
-	public CardSequence(CardSequenceListener listener) {
+	public GenericCardSequence(CardSequenceListener listener) {
 		addListener(listener);
 	}
 	
@@ -49,7 +49,7 @@ public abstract class CardSequence {
 	 * receive call backs whenever a new card sequence is created or
 	 * destroyed etc.
 	 */
-	public CardSequence(Set<CardSequenceListener> listeners) {
+	public GenericCardSequence(Set<CardSequenceListener> listeners) {
 		for( CardSequenceListener listener : listeners ) {
 			addListener(listener);
 		}
@@ -61,7 +61,7 @@ public abstract class CardSequence {
 	 * Inherits all listeners from one sequence to the other
 	 * @param sequence - sequence to inherit listeners
 	 */
-	protected final void addListeners(CardSequence sequence) {
+	protected final void addListeners(GenericCardSequence sequence) {
 		for( CardSequenceListener listener : sequence.listeners ) {
 			addListener(listener);
 		}
@@ -135,7 +135,7 @@ public abstract class CardSequence {
 	 * @param anotherCardSequence - another card sequence
 	 * @return {@code true} if both have the same cards in order
 	 */
-	public final boolean equals(CardSequence anotherCardSequence) {
+	public final boolean equals(GenericCardSequence anotherCardSequence) {
 		Iterator<Card> iterator = getSequenceIterator();
 		anotherCardSequence = Objects.requireNonNull(anotherCardSequence,
 				() -> "Cannot iterate over sequence because it is null");

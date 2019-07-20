@@ -14,9 +14,9 @@ import org.junit.jupiter.api.Test;
 import game.card.Card;
 import game.card.CardRank;
 import game.card.CardSuit;
-import game.card.sequence.CardSequence;
-import game.card.sequence.CardSequenceListener;
+import game.card.sequence.GenericCardSequence;
 import game.card.sequence.RankCardSequence;
+import game.card.sequence.CardSequenceListener;
 
 @DisplayName("On the RankCardSequence class")
 class RankCardSequenceTest implements CardSequenceListener {
@@ -44,8 +44,8 @@ class RankCardSequenceTest implements CardSequenceListener {
 		@Test
 		@DisplayName("when comparing two empty sequences")
 		void testEmptySequencesEqual() {
-			CardSequence firstSequence = new RankCardSequence(listener);
-			CardSequence secondSequence = new RankCardSequence(listener);
+			GenericCardSequence firstSequence = new RankCardSequence(listener);
+			GenericCardSequence secondSequence = new RankCardSequence(listener);
 			assertAll(
 					"should return true",
 					() -> assertTrue(firstSequence.equals(secondSequence)),
@@ -57,7 +57,7 @@ class RankCardSequenceTest implements CardSequenceListener {
 		@Test
 		@DisplayName("when comparing a sequence with null")
 		void testNullSequenceEqual() {
-			CardSequence firstSequence = new RankCardSequence(listener);
+			GenericCardSequence firstSequence = new RankCardSequence(listener);
 			assertThrows(NullPointerException.class, 
 					() -> firstSequence.equals(null),
 					() -> "should throw a NullPointerException");
@@ -66,7 +66,7 @@ class RankCardSequenceTest implements CardSequenceListener {
 		@Test
 		@DisplayName("when comparing two existing sequences")
 		void testNonNullSequenceEqual() {
-			CardSequence firstSequence = new RankCardSequence(listener);
+			GenericCardSequence firstSequence = new RankCardSequence(listener);
 			assertDoesNotThrow(
 					() -> firstSequence.equals(firstSequence),
 					() -> "should not throw any exceptions whatsoever");
@@ -75,8 +75,8 @@ class RankCardSequenceTest implements CardSequenceListener {
 		@Test
 		@DisplayName("when comparing two sequences with the same card (one each)")
 		void testSequencesWithSameCardEqual() {
-			CardSequence firstSequence = new RankCardSequence(listener);
-			CardSequence secondSequence = new RankCardSequence(listener);
+			GenericCardSequence firstSequence = new RankCardSequence(listener);
+			GenericCardSequence secondSequence = new RankCardSequence(listener);
 			firstSequence.addCard(new Card(CardRank.ACE, CardSuit.SPADES));
 			secondSequence.addCard(new Card(CardRank.ACE, CardSuit.SPADES));
 			assertAll(
@@ -89,8 +89,8 @@ class RankCardSequenceTest implements CardSequenceListener {
 		@Test
 		@DisplayName("when comparing two sequences with different cards (one each)")
 		void testSequencesWithDifferentCardsEqual() {
-			CardSequence firstSequence = new RankCardSequence(listener);
-			CardSequence secondSequence = new RankCardSequence(listener);
+			GenericCardSequence firstSequence = new RankCardSequence(listener);
+			GenericCardSequence secondSequence = new RankCardSequence(listener);
 			firstSequence.addCard(new Card(CardRank.ACE, CardSuit.SPADES));
 			secondSequence.addCard(new Card(CardRank.TWO, CardSuit.SPADES));
 			assertAll(
@@ -103,8 +103,8 @@ class RankCardSequenceTest implements CardSequenceListener {
 		@Test
 		@DisplayName("when comparing two sequences with the same cards (multiple)")
 		void testSequencesWithSameMultipleCardsEqual() {
-			CardSequence firstSequence = new RankCardSequence(listener);
-			CardSequence secondSequence = new RankCardSequence(listener);
+			GenericCardSequence firstSequence = new RankCardSequence(listener);
+			GenericCardSequence secondSequence = new RankCardSequence(listener);
 			firstSequence.addCard(new Card(CardRank.ACE, CardSuit.SPADES));
 			firstSequence.addCard(new Card(CardRank.TWO, CardSuit.SPADES));
 			firstSequence.addCard(new Card(CardRank.THREE, CardSuit.SPADES));
@@ -125,8 +125,8 @@ class RankCardSequenceTest implements CardSequenceListener {
 		@Test
 		@DisplayName("when comparing two sequences with different cards (multiple)")
 		void testSequencesWithDifferentMultipleCardsEqual() {
-			CardSequence firstSequence = new RankCardSequence(listener);
-			CardSequence secondSequence = new RankCardSequence(listener);
+			GenericCardSequence firstSequence = new RankCardSequence(listener);
+			GenericCardSequence secondSequence = new RankCardSequence(listener);
 			firstSequence.addCard(new Card(CardRank.ACE, CardSuit.SPADES));
 			assertAll(
 					"should return false",
@@ -159,8 +159,8 @@ class RankCardSequenceTest implements CardSequenceListener {
 	@DisplayName("the addCard method")
 	class AddCardTest implements CardSequenceListener {
 		
-		private final ArrayList<CardSequence> addedSequencesQueue = new ArrayList<CardSequence>();
-		private final ArrayList<CardSequence> removedSequencesQueue = new ArrayList<CardSequence>();
+		private final ArrayList<GenericCardSequence> addedSequencesQueue = new ArrayList<GenericCardSequence>();
+		private final ArrayList<GenericCardSequence> removedSequencesQueue = new ArrayList<GenericCardSequence>();
 		
 		@BeforeEach
 		void init() {
@@ -383,11 +383,11 @@ class RankCardSequenceTest implements CardSequenceListener {
 					() -> "should call addCardSequence once after adding 8th card");
 			assertEquals(0, removedSequencesQueue.size(),
 					() -> "should not call removeCardSequence after adding 8th card");
-			CardSequence cardSequenceCreated = addedSequencesQueue.get(0);
+			GenericCardSequence cardSequenceCreated = addedSequencesQueue.get(0);
 
 			boolean isNewSequenceSmaller = cardSequenceCreated.size() == 3;
-			CardSequence smallerSequence = isNewSequenceSmaller ? cardSequenceCreated : sequence;
-			CardSequence biggerSequence = isNewSequenceSmaller ? sequence : cardSequenceCreated;
+			GenericCardSequence smallerSequence = isNewSequenceSmaller ? cardSequenceCreated : sequence;
+			GenericCardSequence biggerSequence = isNewSequenceSmaller ? sequence : cardSequenceCreated;
 			assertEquals(3, smallerSequence.size(),
 					() -> "should create a sequence with 5 cards after adding 8th card");
 			assertEquals(5, biggerSequence.size(),
@@ -409,13 +409,13 @@ class RankCardSequenceTest implements CardSequenceListener {
 					() -> "Card sequences should be of same size");			
 		}
 		
-		public void cardSequenceAdded(CardSequence cardSequence) {
+		public void cardSequenceAdded(GenericCardSequence cardSequence) {
 			assertNotNull(cardSequence,
 					() -> "Card sequence added should not be null");
 			addedSequencesQueue.add(cardSequence);
 		}
 
-		public void cardSequenceRemoved(CardSequence cardSequence) {
+		public void cardSequenceRemoved(GenericCardSequence cardSequence) {
 			assertNotNull(cardSequence,
 					() -> "Card sequence removed should not be null");
 			removedSequencesQueue.add(cardSequence);
@@ -435,11 +435,11 @@ class RankCardSequenceTest implements CardSequenceListener {
 		
 	}
 	
-	public void cardSequenceAdded(CardSequence cardSequence) {
+	public void cardSequenceAdded(GenericCardSequence cardSequence) {
 		
 	}
 
-	public void cardSequenceRemoved(CardSequence cardSequence) {
+	public void cardSequenceRemoved(GenericCardSequence cardSequence) {
 		
 	}
 

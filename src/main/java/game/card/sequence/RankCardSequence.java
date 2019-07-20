@@ -4,7 +4,7 @@ import java.util.*;
 
 import game.card.Card;
 
-public class RankCardSequence extends CardSequence {
+public class RankCardSequence extends GenericCardSequence {
 	
 	private LinkedList<Card> sequence = new LinkedList<Card>();
 		
