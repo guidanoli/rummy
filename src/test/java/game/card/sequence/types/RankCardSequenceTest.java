@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,29 +13,27 @@ import org.junit.jupiter.api.Test;
 import game.card.Card;
 import game.card.CardRank;
 import game.card.CardSuit;
-import game.card.sequence.GenericCardSequence;
-import game.card.sequence.types.RankCardSequence;
+import game.card.sequence.CardSequence;
+import game.card.sequence.CardSequenceBuilder;
+import game.card.sequence.types.RankCardSequenceType;
 import game.card.sequence.CardSequenceListener;
 
 @DisplayName("On the RankCardSequence class")
 class RankCardSequenceTest implements CardSequenceListener {
 	
 	private CardSequenceListener listener;
-	private RankCardSequence sequence;
+	
+	CardSequenceBuilder newSequenceBuilder(CardSequenceListener listener) {
+		return new CardSequenceBuilder()
+				.setType(new RankCardSequenceType())
+				.addListener(listener);
+	}
 	
 	@BeforeEach
 	void init() {
 		listener = this;
-		sequence = new RankCardSequence();
-		sequence.addListener(listener);
 	}
-	
-	@AfterEach
-	void end() {
-		assertTrue(sequence.hasValidState(),
-				() -> "the sequence should have a valid state");
-	}
-	
+		
 	@Nested
 	@DisplayName("the equals method")
 	class EqualTest {
@@ -44,8 +41,8 @@ class RankCardSequenceTest implements CardSequenceListener {
 		@Test
 		@DisplayName("when comparing two empty sequences")
 		void testEmptySequencesEqual() {
-			GenericCardSequence firstSequence = new RankCardSequence(listener);
-			GenericCardSequence secondSequence = new RankCardSequence(listener);
+			CardSequence firstSequence = newSequenceBuilder(listener).allowInstability(true).build();
+			CardSequence secondSequence = newSequenceBuilder(listener).allowInstability(true).build();
 			assertAll(
 					"should return true",
 					() -> assertTrue(firstSequence.equals(secondSequence)),
@@ -53,32 +50,18 @@ class RankCardSequenceTest implements CardSequenceListener {
 					() -> assertTrue(firstSequence.equals(firstSequence))
 					);
 		}
-		
-		@Test
-		@DisplayName("when comparing a sequence with null")
-		void testNullSequenceEqual() {
-			GenericCardSequence firstSequence = new RankCardSequence(listener);
-			assertThrows(NullPointerException.class, 
-					() -> firstSequence.equals(null),
-					() -> "should throw a NullPointerException");
-		}
-		
-		@Test
-		@DisplayName("when comparing two existing sequences")
-		void testNonNullSequenceEqual() {
-			GenericCardSequence firstSequence = new RankCardSequence(listener);
-			assertDoesNotThrow(
-					() -> firstSequence.equals(firstSequence),
-					() -> "should not throw any exceptions whatsoever");
-		}
-		
+				
 		@Test
 		@DisplayName("when comparing two sequences with the same card (one each)")
 		void testSequencesWithSameCardEqual() {
-			GenericCardSequence firstSequence = new RankCardSequence(listener);
-			GenericCardSequence secondSequence = new RankCardSequence(listener);
-			firstSequence.addCard(new Card(CardRank.ACE, CardSuit.SPADES));
-			secondSequence.addCard(new Card(CardRank.ACE, CardSuit.SPADES));
+			CardSequence firstSequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			CardSequence secondSequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
 			assertAll(
 					"should return true",
 					() -> assertTrue(firstSequence.equals(secondSequence)),
@@ -89,10 +72,14 @@ class RankCardSequenceTest implements CardSequenceListener {
 		@Test
 		@DisplayName("when comparing two sequences with different cards (one each)")
 		void testSequencesWithDifferentCardsEqual() {
-			GenericCardSequence firstSequence = new RankCardSequence(listener);
-			GenericCardSequence secondSequence = new RankCardSequence(listener);
-			firstSequence.addCard(new Card(CardRank.ACE, CardSuit.SPADES));
-			secondSequence.addCard(new Card(CardRank.TWO, CardSuit.SPADES));
+			CardSequence firstSequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			CardSequence secondSequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
 			assertAll(
 					"should return false",
 					() -> assertFalse(firstSequence.equals(secondSequence)),
@@ -103,18 +90,22 @@ class RankCardSequenceTest implements CardSequenceListener {
 		@Test
 		@DisplayName("when comparing two sequences with the same cards (multiple)")
 		void testSequencesWithSameMultipleCardsEqual() {
-			GenericCardSequence firstSequence = new RankCardSequence(listener);
-			GenericCardSequence secondSequence = new RankCardSequence(listener);
-			firstSequence.addCard(new Card(CardRank.ACE, CardSuit.SPADES));
-			firstSequence.addCard(new Card(CardRank.TWO, CardSuit.SPADES));
-			firstSequence.addCard(new Card(CardRank.THREE, CardSuit.SPADES));
-			firstSequence.addCard(new Card(CardRank.FOUR, CardSuit.SPADES));
-			firstSequence.addCard(new Card(CardRank.FIVE, CardSuit.SPADES));
-			secondSequence.addCard(new Card(CardRank.ACE, CardSuit.SPADES));
-			secondSequence.addCard(new Card(CardRank.TWO, CardSuit.SPADES));
-			secondSequence.addCard(new Card(CardRank.THREE, CardSuit.SPADES));
-			secondSequence.addCard(new Card(CardRank.FOUR, CardSuit.SPADES));
-			secondSequence.addCard(new Card(CardRank.FIVE, CardSuit.SPADES));
+			CardSequence firstSequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
+					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.FOUR, CardSuit.SPADES))
+					.addCard(new Card(CardRank.FIVE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			CardSequence secondSequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
+					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.FOUR, CardSuit.SPADES))
+					.addCard(new Card(CardRank.FIVE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
 			assertAll(
 					"should return true",
 					() -> assertTrue(firstSequence.equals(secondSequence)),
@@ -125,9 +116,13 @@ class RankCardSequenceTest implements CardSequenceListener {
 		@Test
 		@DisplayName("when comparing two sequences with different cards (multiple)")
 		void testSequencesWithDifferentMultipleCardsEqual() {
-			GenericCardSequence firstSequence = new RankCardSequence(listener);
-			GenericCardSequence secondSequence = new RankCardSequence(listener);
-			firstSequence.addCard(new Card(CardRank.ACE, CardSuit.SPADES));
+			CardSequence firstSequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			CardSequence secondSequence = newSequenceBuilder(listener)
+					.allowInstability(true)
+					.build();
 			assertAll(
 					"should return false",
 					() -> assertFalse(firstSequence.equals(secondSequence)),
@@ -159,29 +154,15 @@ class RankCardSequenceTest implements CardSequenceListener {
 	@DisplayName("the addCard method")
 	class AddCardTest implements CardSequenceListener {
 		
-		private final ArrayList<GenericCardSequence> addedSequencesQueue = new ArrayList<GenericCardSequence>();
-		private final ArrayList<GenericCardSequence> removedSequencesQueue = new ArrayList<GenericCardSequence>();
+		private final ArrayList<CardSequence> addedSequencesQueue = new ArrayList<CardSequence>();
+		private final ArrayList<CardSequence> removedSequencesQueue = new ArrayList<CardSequence>();
+		private CardSequenceBuilder builder;
 		
 		@BeforeEach
 		void init() {
 			addedSequencesQueue.clear();
 			removedSequencesQueue.clear();
-		}
-		
-		@Test
-		@DisplayName("when adding a null card")
-		void testNullCard() {
-			assertThrows(NullPointerException.class,
-					() -> sequence.addCard(null),
-					() -> "should throw a NullPointerException");
-		}
-		
-		@Test
-		@DisplayName("when adding a non-null card")
-		void testNonNullCard() {
-			assertDoesNotThrow(
-					() -> sequence.add(new Card(CardRank.ACE, CardSuit.SPADES)),
-					() -> "should not throw any exception whatsoever");
+			builder = newSequenceBuilder(this);
 		}
 		
 		@Test
@@ -190,11 +171,12 @@ class RankCardSequenceTest implements CardSequenceListener {
 			Card [] cards = { 
 					new Card(CardRank.ACE, CardSuit.SPADES)
 			};
+			CardSequence sequence = builder.allowInstability(true).build();
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(sequence.addCard(cards[i]),
 						() -> "adds successfully to the sequence");
 			}
-			Iterator<Card> iterator = sequence.getSequenceIterator();
+			Iterator<Card> iterator = sequence.iterator();
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add one card exactly");
@@ -210,11 +192,12 @@ class RankCardSequenceTest implements CardSequenceListener {
 					new Card(CardRank.ACE, CardSuit.SPADES),
 					new Card(CardRank.TWO, CardSuit.SPADES)
 			};
+			CardSequence sequence = builder.allowInstability(true).build();
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(sequence.addCard(cards[i]),
 						() -> "adds successfully to the sequence");
 			}
-			Iterator<Card> iterator = sequence.getSequenceIterator();
+			Iterator<Card> iterator = sequence.iterator();
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add two cards exactly");
@@ -230,11 +213,12 @@ class RankCardSequenceTest implements CardSequenceListener {
 					new Card(CardRank.TWO, CardSuit.SPADES),
 					new Card(CardRank.ACE, CardSuit.SPADES)
 			};
+			CardSequence sequence = builder.allowInstability(true).build();
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(sequence.addCard(cards[i]),
 						() -> "adds successfully to the sequence");
 			}
-			Iterator<Card> iterator = sequence.getSequenceIterator();
+			Iterator<Card> iterator = sequence.iterator();
 			for(int i = cards.length - 1; i >= 0; i--) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add two cards exactly");
@@ -251,11 +235,12 @@ class RankCardSequenceTest implements CardSequenceListener {
 					new Card(CardRank.TWO, CardSuit.SPADES),
 					new Card(CardRank.THREE, CardSuit.SPADES)
 			};
+			CardSequence sequence = builder.allowInstability(true).build();
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(sequence.addCard(cards[i]),
 						() -> "adds successfully to the sequence");
 			}
-			Iterator<Card> iterator = sequence.getSequenceIterator();
+			Iterator<Card> iterator = sequence.iterator();
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add three cards exactly");
@@ -272,11 +257,12 @@ class RankCardSequenceTest implements CardSequenceListener {
 					new Card(CardRank.TWO, CardSuit.SPADES),
 					new Card(CardRank.THREE, CardSuit.SPADES)
 			};
+			CardSequence sequence = builder.allowInstability(true).build();
 			for(int i = cards.length - 1; i >= 0 ; i--) {
 				assertTrue(sequence.addCard(cards[i]),
 						() -> "adds successfully to the sequence");
 			}
-			Iterator<Card> iterator = sequence.getSequenceIterator();
+			Iterator<Card> iterator = sequence.iterator();
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add three cards exactly");
@@ -294,11 +280,12 @@ class RankCardSequenceTest implements CardSequenceListener {
 					new Card(CardRank.ACE, CardSuit.SPADES),
 					new Card(CardRank.ACE, CardSuit.SPADES)
 			};
+			CardSequence sequence = builder.allowInstability(true).build();
 			assertTrue(sequence.addCard(cards[0]),
 					() -> "should add the first card");
 			assertFalse(sequence.addCard(cards[1]),
 					() -> "should not add the second card");
-			Iterator<Card> iterator = sequence.getSequenceIterator();
+			Iterator<Card> iterator = sequence.iterator();
 			assertTrue(iterator.hasNext(),
 					() -> "it should add one card exactly");
 			assertTrue(cards[0].equals(iterator.next()),
@@ -314,11 +301,12 @@ class RankCardSequenceTest implements CardSequenceListener {
 					new Card(CardRank.KING, CardSuit.SPADES),
 					new Card(CardRank.ACE, CardSuit.SPADES)
 			};
+			CardSequence sequence = builder.allowInstability(true).build();
 			assertTrue(sequence.addCard(cards[0]),
 					() -> "should add the king");
 			assertFalse(sequence.addCard(cards[1]),
 					() -> "should not add the ace");
-			Iterator<Card> iterator = sequence.getSequenceIterator();
+			Iterator<Card> iterator = sequence.iterator();
 			assertTrue(iterator.hasNext(),
 					() -> "it should add one card exactly");
 			assertTrue(cards[0].equals(iterator.next()),
@@ -342,11 +330,12 @@ class RankCardSequenceTest implements CardSequenceListener {
 					new Card(CardRank.NINE, CardSuit.SPADES)
 			};
 			int [] order = {4,3,5,2,6,1,7,0,8};
+			CardSequence sequence = builder.allowInstability(true).build();
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(sequence.addCard(cards[order[i]]),
 						() -> "adds cards successfully to the sequence");
 			}
-			Iterator<Card> iterator = sequence.getSequenceIterator();
+			Iterator<Card> iterator = sequence.iterator();
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add all five cards exactly");
@@ -360,7 +349,6 @@ class RankCardSequenceTest implements CardSequenceListener {
 		@Test
 		@DisplayName("when partitioning the sequence twice")
 		void testDoublePartition() {
-			sequence = new RankCardSequence(this);
 			Card [] cards = {
 					new Card(CardRank.ACE, CardSuit.SPADES),
 					new Card(CardRank.TWO, CardSuit.SPADES),
@@ -370,6 +358,7 @@ class RankCardSequenceTest implements CardSequenceListener {
 					new Card(CardRank.SIX, CardSuit.SPADES),
 					new Card(CardRank.SEVEN, CardSuit.SPADES)
 			};
+			CardSequence sequence = builder.allowInstability(true).build();
 			for(int i = 0; i < cards.length; i++) sequence.addCard(cards[i]);
 			assertEquals(cards.length, sequence.size(),
 					() -> "should add all cards");
@@ -383,19 +372,19 @@ class RankCardSequenceTest implements CardSequenceListener {
 					() -> "should call addCardSequence once after adding 8th card");
 			assertEquals(0, removedSequencesQueue.size(),
 					() -> "should not call removeCardSequence after adding 8th card");
-			GenericCardSequence cardSequenceCreated = addedSequencesQueue.get(0);
+			CardSequence cardSequenceCreated = addedSequencesQueue.get(0);
 
 			boolean isNewSequenceSmaller = cardSequenceCreated.size() == 3;
-			GenericCardSequence smallerSequence = isNewSequenceSmaller ? cardSequenceCreated : sequence;
-			GenericCardSequence biggerSequence = isNewSequenceSmaller ? sequence : cardSequenceCreated;
+			CardSequence smallerSequence = isNewSequenceSmaller ? cardSequenceCreated : sequence;
+			CardSequence biggerSequence = isNewSequenceSmaller ? sequence : cardSequenceCreated;
 			assertEquals(3, smallerSequence.size(),
 					() -> "should create a sequence with 5 cards after adding 8th card");
 			assertEquals(5, biggerSequence.size(),
 					() -> "should create a sequence with 3 cards after adding 8th card");
-			assertTrue(smallerSequence.hasValidState(),
-					() -> "should create card sequences with a valid state");
-			assertTrue(biggerSequence.hasValidState(),
-					() -> "should create card sequences with a valid state");
+			assertTrue(smallerSequence.isStable(),
+					() -> "should create stable card sequences");
+			assertTrue(biggerSequence.isStable(),
+					() -> "should create stable card sequences");
 			
 			addedSequencesQueue.clear();
 			assertTrue(biggerSequence.addCard(new Card(CardRank.FIVE, CardSuit.SPADES)),
@@ -409,13 +398,13 @@ class RankCardSequenceTest implements CardSequenceListener {
 					() -> "Card sequences should be of same size");			
 		}
 		
-		public void cardSequenceAdded(GenericCardSequence cardSequence) {
+		public void cardSequenceAdded(CardSequence cardSequence) {
 			assertNotNull(cardSequence,
 					() -> "Card sequence added should not be null");
 			addedSequencesQueue.add(cardSequence);
 		}
 
-		public void cardSequenceRemoved(GenericCardSequence cardSequence) {
+		public void cardSequenceIsEmpty(CardSequence cardSequence) {
 			assertNotNull(cardSequence,
 					() -> "Card sequence removed should not be null");
 			removedSequencesQueue.add(cardSequence);
@@ -435,11 +424,11 @@ class RankCardSequenceTest implements CardSequenceListener {
 		
 	}
 	
-	public void cardSequenceAdded(GenericCardSequence cardSequence) {
+	public void cardSequenceAdded(CardSequence cardSequence) {
 		
 	}
 
-	public void cardSequenceRemoved(GenericCardSequence cardSequence) {
+	public void cardSequenceIsEmpty(CardSequence cardSequence) {
 		
 	}
 
