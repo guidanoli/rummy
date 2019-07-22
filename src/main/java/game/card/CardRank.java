@@ -39,8 +39,7 @@ public enum CardRank {
 	
 	CardRank(int index, String name) {
 		this.index = index;
-		this.name = Objects.requireNonNull(name,
-				() -> "Null name is not accepted");
+		this.name = name;
 	}
 	
 	/**
@@ -64,7 +63,6 @@ public enum CardRank {
 	 * @see #compare(CardRank)
 	 */
 	public boolean equals(CardRank anotherCardRank) {
-		assert anotherCardRank != null;
 		return compare(anotherCardRank) == 0;
 	}
 	
@@ -77,7 +75,6 @@ public enum CardRank {
 	 * @see #compare(CardRank)
 	 */
 	public boolean isNeighbour(CardRank anotherCardRank) {
-		assert anotherCardRank != null;
 		return Math.abs(compare(anotherCardRank)) == 1;
 	}
 	
@@ -92,7 +89,6 @@ public enum CardRank {
 	 * @see #isNeighbour(CardRank)
 	 */
 	public int compare(CardRank anotherCardRank) {
-		assert anotherCardRank != null;
 		return getIndex() - anotherCardRank.getIndex();
 	}
 	

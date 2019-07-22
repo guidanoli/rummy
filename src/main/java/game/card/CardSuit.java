@@ -24,8 +24,7 @@ public enum CardSuit {
 	
 	CardSuit(int index, String name) {
 		this.index = index;
-		this.name = Objects.requireNonNull(name,
-				() -> "Null name is not accepted");
+		this.name = name;
 	}
 	
 	/**

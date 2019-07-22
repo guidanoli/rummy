@@ -12,35 +12,7 @@ import game.card.CardSuit;
 
 @DisplayName("On the Card class")
 class CardTest {
-	
-	@Nested
-	@DisplayName("the constructor")
-	class ConstructorTest {
 		
-		@Test
-		@DisplayName("when passing null")
-		void testNull() {
-			assertThrows(NullPointerException.class,
-					() -> new Card(CardRank.ACE,null),
-					() -> "to suit field should throw NullPointerException");
-			assertThrows(NullPointerException.class,
-					() -> new Card(null,CardSuit.SPADES),
-					() -> "to rank field should throw NullPointerException");
-			assertThrows(NullPointerException.class,
-					() -> new Card(null,null),
-					() -> "to both field should throw NullPointerException");
-		}
-				
-		@Test
-		@DisplayName("when passing non-null arguments")
-		void testNonNull() {
-			assertDoesNotThrow(
-					() -> new Card(CardRank.ACE, CardSuit.SPADES),
-					() -> "does not throw any exceptions whatsoever");
-		}
-		
-	}
-	
 	@Nested
 	@DisplayName("the getRank method")
 	class GetRankTest {

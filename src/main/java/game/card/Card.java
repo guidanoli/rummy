@@ -27,13 +27,10 @@ public class Card {
 	 * Constructs a card object
 	 * @param rank - card rank
 	 * @param suit - card suit
-	 * @throws NullPointerException if one of the fields is {@code null}
 	 */
 	public Card(CardRank rank, CardSuit suit) {
-		this.rank = Objects.requireNonNull(rank,
-				() -> "Null rank is not accepted");
-		this.suit = Objects.requireNonNull(suit,
-				() -> "Null suit is not accepted");
+		this.rank = rank;
+		this.suit = suit;
 	}
 	
 	/**
@@ -66,11 +63,8 @@ public class Card {
 	 * @param anotherCard - another card
 	 * @return {@code rank of this card - rank of the other card}
 	 * @see CardRank#compare(CardRank)
-	 * @throws NullPointerException if card provided is {@code null}
 	 */
 	public int compareRanks(Card anotherCard) {
-		Objects.requireNonNull(anotherCard,
-				() -> "Null card parameter is not accepted");
 		return getRank().compare(anotherCard.getRank());
 	}
 	
@@ -79,11 +73,8 @@ public class Card {
 	 * @param anotherCard - another card
 	 * @return {@code true} if they share the same suit
 	 * @see CardSuit#equals(CardSuit)
-	 * @throws NullPointerException if card provided is {@code null}
 	 */
 	public boolean equalSuits(Card anotherCard) {
-		Objects.requireNonNull(anotherCard,
-				() -> "Null card parameter is not accepted");
 		return getSuit().equals(anotherCard.getSuit());
 	}
 	
@@ -92,11 +83,8 @@ public class Card {
 	 * @param anotherCard - another card
 	 * @return {@code true} if they share the same rank
 	 * @see CardRank#equals(CardRank)
-	 * @throws NullPointerException if card provided is {@code null}
 	 */
 	public boolean equalRanks(Card anotherCard) {
-		Objects.requireNonNull(anotherCard,
-				() -> "Null card parameter is not accepted");
 		return getRank().equals(anotherCard.getRank());
 	}
 	
@@ -106,11 +94,8 @@ public class Card {
 	 * @return {@code true} if they share the same information
 	 * @see #equalRanks(Card)
 	 * @see #equalSuits(Card)
-	 * @throws NullPointerException if card provided is {@code null}
 	 */
 	public boolean equals(Card anotherCard) {
-		Objects.requireNonNull(anotherCard,
-				() -> "Null card parameter is not accepted");
 		return equalRanks(anotherCard) && equalSuits(anotherCard);
 	}
 	
@@ -120,11 +105,8 @@ public class Card {
 	 * @return {@code true} if they can be found side by side
 	 * on a card sequence
 	 * @see CardSequence
-	 * @throws NullPointerException if card provided is {@code null}
 	 */
 	public boolean isNeighbour(Card anotherCard) {
-		Objects.requireNonNull(anotherCard,
-				() -> "Null card parameter is not accepted");
 		return	(getSuit().equals(anotherCard.getSuit()) &&
 				getRank().isNeighbour(anotherCard.getRank()))
 				||

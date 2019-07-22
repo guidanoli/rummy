@@ -55,12 +55,9 @@ public class CardSequence {
 	 * @param card - card to be added
 	 * @return {@code true} if card was added and
 	 * {@code false} if card could not be added
-	 * @throws NullPointerException if card is {@code null}
 	 */
 	public boolean addCard(Card card) {
 		boolean added = false;
-		card = Objects.requireNonNull(card, 
-				() -> "Cannot add null card");
 		if( added = type.canAdd(card) ) {
 			CardSequenceBuilder builder = type.add(card);
 			if( builder != null ) buildNewSequence(builder);
@@ -74,12 +71,9 @@ public class CardSequence {
 	 * @param card - card to be removed
 	 * @return {@code true} if card was removed and
 	 * {@code false} if card could not be removed
-	 * @throws NullPointerException if card is {@code null}
 	 */
 	public boolean removeCard(Card card) {
 		boolean removed = false;
-		Objects.requireNonNull(card, 
-			() -> "Cannot remove null card");
 		if( removed = type.canRemove(card) ) {
 			CardSequenceBuilder builder = type.remove(card);
 			if( builder != null ) buildNewSequence(builder);
@@ -123,8 +117,6 @@ public class CardSequence {
 	 */
 	public boolean equals(CardSequence anotherCardSequence) {
 		Iterator<Card> iterator = type.getSequenceIterator();
-		anotherCardSequence = Objects.requireNonNull(anotherCardSequence,
-				() -> "Cannot iterate over sequence because it is null");
 		Iterator<Card> anotherIterator = anotherCardSequence.type.getSequenceIterator();
 		while( iterator.hasNext() ) {
 			if( !anotherIterator.hasNext() ||
