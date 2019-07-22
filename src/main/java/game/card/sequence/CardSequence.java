@@ -76,6 +76,7 @@ public class CardSequence {
 		if( removed = type.canRemove(card) ) {
 			CardSequenceBuilder builder = type.remove(card);
 			if( builder != null ) buildNewSequence(builder);
+			callListeners((listener) -> listener.cardRemovedFromSequence(card));
 			if( size() == 0 ) callListeners((listener) -> listener.cardSequenceIsEmpty(this));
 		}
 		return removed;

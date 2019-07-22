@@ -49,18 +49,30 @@ public class RankCardSequenceType implements CardSequenceType {
 	}
 
 	public CardSequenceBuilder remove(Card card) {
-		Card firstCard = sequence.getFirst();
-		int index = card.compareRanks(firstCard);
+		int index = getIndex(card);
 		CardSequenceBuilder builder = null;
 		if( canSplit(index) ) {
 			builder = split(index+1);
 		}
-		sequence.remove(card);
+		sequence.remove(index);
 		return builder;
 	}
 	
 	public boolean canRemove(Card card) {
-		return sequence.contains(card);
+		return getIndex(card) != -1;
+	}
+	
+	/**
+	 * @param card - card in sequence
+	 * @return index or -1 if not found
+	 */
+	private int getIndex(Card card) {
+		if( sequence.isEmpty() ) return -1;
+		Card firstCard = sequence.getFirst();
+		if( !firstCard.equalSuits(card) ) return -1;
+		int index = card.compareRanks(firstCard);
+		if( index < 0 || index >= size() ) return -1;
+		return index;
 	}
 
 	public CardSequenceBuilder split(int index) {

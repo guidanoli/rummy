@@ -22,6 +22,9 @@ import game.card.sequence.CardSequenceListener;
 class RankCardSequenceTest implements CardSequenceListener {
 	
 	private CardSequenceListener listener;
+	private final ArrayList<CardSequence> addedSequencesQueue = new ArrayList<CardSequence>();
+	private final ArrayList<CardSequence> emptySequencesQueue = new ArrayList<CardSequence>();
+	private final ArrayList<Card> removedCardsQueue = new ArrayList<Card>();
 	
 	CardSequenceBuilder newSequenceBuilder(CardSequenceListener listener) {
 		return new CardSequenceBuilder()
@@ -37,7 +40,7 @@ class RankCardSequenceTest implements CardSequenceListener {
 	@Nested
 	@DisplayName("the equals method")
 	class EqualTest {
-		
+				
 		@Test
 		@DisplayName("when comparing two empty sequences")
 		void testEmptySequencesEqual() {
@@ -152,17 +155,16 @@ class RankCardSequenceTest implements CardSequenceListener {
 
 	@Nested
 	@DisplayName("the addCard method")
-	class AddCardTest implements CardSequenceListener {
+	class AddCardTest {
 		
-		private final ArrayList<CardSequence> addedSequencesQueue = new ArrayList<CardSequence>();
-		private final ArrayList<CardSequence> removedSequencesQueue = new ArrayList<CardSequence>();
 		private CardSequenceBuilder builder;
 		
 		@BeforeEach
 		void init() {
 			addedSequencesQueue.clear();
-			removedSequencesQueue.clear();
-			builder = newSequenceBuilder(this);
+			emptySequencesQueue.clear();
+			removedCardsQueue.clear();
+			builder = newSequenceBuilder(listener);
 		}
 		
 		@Test
@@ -364,13 +366,13 @@ class RankCardSequenceTest implements CardSequenceListener {
 					() -> "should add all cards");
 			assertEquals(0, addedSequencesQueue.size(),
 					() -> "should not call addCardSequence before adding 8th card");
-			assertEquals(0, removedSequencesQueue.size(),
+			assertEquals(0, emptySequencesQueue.size(),
 					() -> "should not call removeCardSequence before adding 8th card");
 			assertTrue(sequence.addCard(new Card(CardRank.THREE, CardSuit.SPADES)),
 					() -> "should let the 8th card be added in the middle");
 			assertEquals(1, addedSequencesQueue.size(),
 					() -> "should call addCardSequence once after adding 8th card");
-			assertEquals(0, removedSequencesQueue.size(),
+			assertEquals(0, emptySequencesQueue.size(),
 					() -> "should not call removeCardSequence after adding 8th card");
 			CardSequence cardSequenceCreated = addedSequencesQueue.get(0);
 
@@ -391,49 +393,87 @@ class RankCardSequenceTest implements CardSequenceListener {
 					() -> "should let the 9th card be added in the middle of the larger sequence");
 			assertEquals(1, addedSequencesQueue.size(),
 					() -> "should call addCardSequence once after adding 9th card");
-			assertEquals(0, removedSequencesQueue.size(),
+			assertEquals(0, emptySequencesQueue.size(),
 					() -> "should not call removeCardSequence after adding 9th card");
 			cardSequenceCreated = addedSequencesQueue.get(0);
 			assertEquals(cardSequenceCreated.size(),biggerSequence.size(),
 					() -> "Card sequences should be of same size");			
 		}
-		
-		public void cardSequenceAdded(CardSequence cardSequence) {
-			assertNotNull(cardSequence,
-					() -> "Card sequence added should not be null");
-			addedSequencesQueue.add(cardSequence);
-		}
-
-		public void cardSequenceIsEmpty(CardSequence cardSequence) {
-			assertNotNull(cardSequence,
-					() -> "Card sequence removed should not be null");
-			removedSequencesQueue.add(cardSequence);
-		}
-
-		public void cardRemovedFromSequence(Card card) {
-			
-		}
-		
+				
 	}
 	
 	@Nested
 	@DisplayName("the removeCard method")
 	class RemoveCardTest {
+				
+		@Test
+		@DisplayName("when removing a card from an empty sequence")
+		void testEmptySequence() {
+			CardSequence sequence = newSequenceBuilder(listener)
+					.allowInstability(true)
+					.build();
+			assertFalse(sequence.removeCard(new Card(CardRank.ACE, CardSuit.SPADES)),
+					() -> "should return false");
+		}
 		
+		@Test
+		@DisplayName("when removing the only card from a sequence")
+		void testSingleCard() {
+			CardSequence sequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			assertTrue(sequence.removeCard(new Card(CardRank.ACE, CardSuit.SPADES)),
+					() -> "should return true");
+			assertEquals(0, sequence.size(),
+					() -> "should empty the sequence");
+			assertEquals(1, removedCardsQueue.size(),
+					() -> "should notify that the card has been removed");
+		}
 		
-		
+
+		@Test
+		@DisplayName("when trying to remove a card that's not in a sequence")
+		void testSingleWrongCard() {
+			CardSequence sequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
+					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			int initialSize = sequence.size();
+			assertAll(
+					"should return false",
+					() -> assertFalse(sequence.removeCard(new Card(CardRank.TWO, CardSuit.HEARTS))),	// has rank but not suit
+					() -> assertFalse(sequence.removeCard(new Card(CardRank.KING, CardSuit.SPADES))),	// has suit but not rank
+					() -> assertFalse(sequence.removeCard(new Card(CardRank.KING, CardSuit.HEARTS))) 	// has neither rank or suit
+			);
+			assertEquals(initialSize, sequence.size(),
+					() -> "should not remove any cards");
+			assertEquals(0, removedCardsQueue.size(),
+					() -> "should not notify that a card has been removed");
+		}
+				
 	}
 	
+	/* Listener methods */
+	
 	public void cardSequenceAdded(CardSequence cardSequence) {
-		
+		assertNotNull(cardSequence,
+				() -> "Card sequence added should not be null");
+		addedSequencesQueue.add(cardSequence);
 	}
 
 	public void cardSequenceIsEmpty(CardSequence cardSequence) {
-		
+		assertNotNull(cardSequence,
+				() -> "Card sequence removed should not be null");
+		emptySequencesQueue.add(cardSequence);
 	}
 
 	public void cardRemovedFromSequence(Card card) {
-		
+		assertNotNull(card,
+				() -> "Card removed should not be null");
+		removedCardsQueue.add(card);
 	}
 
 }
