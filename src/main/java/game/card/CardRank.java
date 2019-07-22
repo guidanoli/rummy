@@ -1,7 +1,5 @@
 package game.card;
 
-import java.util.Objects;
-
 /**
  * 
  * <p>A card rank is an ordered attribute of a card,

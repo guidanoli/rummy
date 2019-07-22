@@ -1,7 +1,5 @@
 package game.card;
 
-import java.util.Objects;
-
 /**
  * 
  * <p>A card suit is an unordered attribute of a card,

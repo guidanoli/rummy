@@ -1,7 +1,5 @@
 package game.card;
 
-import java.util.Objects;
-
 import game.card.sequence.CardSequence;
 
 /**
