@@ -112,19 +112,24 @@ public class CardSequence {
 	
 	/**
 	 * Checks whether two card sequences contain the same cards, in the same order
-	 * @param anotherCardSequence - another card sequence
+	 * @param o - another card sequence
 	 * @return {@code true} if both have the same cards in the same order
 	 */
-	public boolean equals(CardSequence anotherCardSequence) {
-		Iterator<Card> iterator = type.getSequenceIterator();
-		Iterator<Card> anotherIterator = anotherCardSequence.type.getSequenceIterator();
-		while( iterator.hasNext() ) {
-			if( !anotherIterator.hasNext() ||
-				!anotherIterator.next().equals(iterator.next()) ) {
-				return false;
+	@Override
+	public boolean equals(Object o) {
+		if( o instanceof CardSequence ) {
+			CardSequence anotherCardSequence = (CardSequence) o;
+			Iterator<Card> iterator = type.getSequenceIterator();
+			Iterator<Card> anotherIterator = anotherCardSequence.type.getSequenceIterator();
+			while( iterator.hasNext() ) {
+				if( !anotherIterator.hasNext() ||
+					!anotherIterator.next().equals(iterator.next()) ) {
+					return false;
+				}
 			}
+			return !anotherIterator.hasNext();
 		}
-		return !anotherIterator.hasNext();
+		return this == o;
 	}
 	
 	/**

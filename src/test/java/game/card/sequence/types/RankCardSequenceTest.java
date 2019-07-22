@@ -414,6 +414,10 @@ class RankCardSequenceTest implements CardSequenceListener {
 					.build();
 			assertFalse(sequence.removeCard(new Card(CardRank.ACE, CardSuit.SPADES)),
 					() -> "should return false");
+			assertEquals(0, sequence.size(),
+					() -> "should not change the sequence size");
+			assertEquals(0, removedCardsQueue.size(),
+					() -> "should not notify that a card has been removed");
 		}
 		
 		@Test
@@ -436,24 +440,112 @@ class RankCardSequenceTest implements CardSequenceListener {
 		@DisplayName("when trying to remove a card that's not in a sequence")
 		void testSingleWrongCard() {
 			CardSequence sequence = newSequenceBuilder(listener)
-					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
 					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
 					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.FOUR, CardSuit.SPADES))
 					.allowInstability(true)
 					.build();
 			int initialSize = sequence.size();
 			assertAll(
 					"should return false",
 					() -> assertFalse(sequence.removeCard(new Card(CardRank.TWO, CardSuit.HEARTS))),	// has rank but not suit
-					() -> assertFalse(sequence.removeCard(new Card(CardRank.KING, CardSuit.SPADES))),	// has suit but not rank
-					() -> assertFalse(sequence.removeCard(new Card(CardRank.KING, CardSuit.HEARTS))) 	// has neither rank or suit
+					() -> assertFalse(sequence.removeCard(new Card(CardRank.ACE, CardSuit.SPADES))),	// has suit but not rank (before)
+					() -> assertFalse(sequence.removeCard(new Card(CardRank.FIVE, CardSuit.SPADES))),	// has suit but not rank (after)
+					() -> assertFalse(sequence.removeCard(new Card(CardRank.ACE, CardSuit.HEARTS))) 	// has neither rank or suit
 			);
 			assertEquals(initialSize, sequence.size(),
 					() -> "should not remove any cards");
 			assertEquals(0, removedCardsQueue.size(),
 					() -> "should not notify that a card has been removed");
 		}
-				
+		
+		@Test
+		@DisplayName("when removing the first card from a triple")
+		void testFirstFromTriple() {
+			CardSequence sequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
+					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			assertTrue(sequence.removeCard(new Card(CardRank.ACE, CardSuit.SPADES)),
+					() -> "should return true");
+			assertEquals(2, sequence.size(),
+					() -> "should reduce the sequence size by one");
+			assertEquals(1, removedCardsQueue.size(),
+					() -> "should notify that a card has been removed");
+			assertEquals(0, addedSequencesQueue.size(),
+					() -> "should not notify that a sequence has been added");
+			CardSequence expected = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
+					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			assertEquals(expected, sequence,
+					() -> "should shift cards to the left");
+		}
+		
+		@Test
+		@DisplayName("when removing the middle card from a triple")
+		void testMiddleFromTriple() {
+			CardSequence sequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
+					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			assertTrue(sequence.removeCard(new Card(CardRank.TWO, CardSuit.SPADES)),
+					() -> "should return true");
+			assertEquals(1, sequence.size(),
+					() -> "should leave only the left cards");
+			assertEquals(1, removedCardsQueue.size(),
+					() -> "should notify that a card has been removed");
+			assertEquals(1, addedSequencesQueue.size(),
+					() -> "should notify that a sequence has been added");
+			CardSequence expected = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			assertEquals(expected, sequence,
+					() -> "should keep only the cards to the left of the removed card");
+			CardSequence newSequence = addedSequencesQueue.get(0);
+			expected = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			assertEquals(expected, newSequence,
+					() -> "should create a new sequence with the cards to the right of the removed card");
+			Card removedCard = removedCardsQueue.get(0);
+			assertEquals(new Card(CardRank.TWO, CardSuit.SPADES), removedCard,
+					() -> "should remove the middle card correctly");
+		}
+		
+		@Test
+		@DisplayName("when removing the last card from a triple")
+		void testLastFromTriple() {
+			CardSequence sequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
+					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			assertTrue(sequence.removeCard(new Card(CardRank.THREE, CardSuit.SPADES)),
+					() -> "should return true");
+			assertEquals(2, sequence.size(),
+					() -> "should reduce the sequence size by one");
+			assertEquals(1, removedCardsQueue.size(),
+					() -> "should notify that a card has been removed");
+			assertEquals(0, addedSequencesQueue.size(),
+					() -> "should not notify that a sequence has been added");
+			CardSequence expected = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			assertEquals(expected, sequence,
+					() -> "should keep cards as is but without last card");
+		}
+		
 	}
 	
 	/* Listener methods */

@@ -88,13 +88,18 @@ public class Card {
 	
 	/**
 	 * Checks whether two cards share the same information
-	 * @param anotherCard - another card
+	 * @param o - another card
 	 * @return {@code true} if they share the same information
 	 * @see #equalRanks(Card)
 	 * @see #equalSuits(Card)
 	 */
-	public boolean equals(Card anotherCard) {
-		return equalRanks(anotherCard) && equalSuits(anotherCard);
+	@Override
+	public boolean equals(Object o) {
+		if( o instanceof Card ) {
+			Card card = (Card) o;
+			return equalRanks(card) && equalSuits(card);
+		}
+		return this == o;
 	}
 	
 	/**

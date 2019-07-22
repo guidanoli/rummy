@@ -87,7 +87,7 @@ public class RankCardSequenceType implements CardSequenceType {
 	}
 
 	public boolean canSplit(int index) {
-		return index > 0 && index < size();
+		return index > 0 && index < size() - 1;
 	}
 	
 	public Iterator<Card> getSequenceIterator() {
