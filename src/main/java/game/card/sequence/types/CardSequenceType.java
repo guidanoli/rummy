@@ -1,6 +1,8 @@
 package game.card.sequence.types;
 
 import java.util.Iterator;
+import java.util.Set;
+
 import game.card.Card;
 import game.card.sequence.CardSequenceBuilder;
 
@@ -37,6 +39,14 @@ public interface CardSequenceType {
 	 * </ul>
 	 */
 	public CardSequenceBuilder add(Card card);
+	
+	/**
+	 * Tries to add all the cards in a set
+	 * @param cardSet - set of cards to be added
+	 * @return {@code true} if it could add all of the cards and 
+	 * {@code false} otherwise.
+	 */
+	public boolean addCardSet(Set<Card> cardSet);
 	
 	/**
 	 * @param card - card in question
@@ -86,16 +96,7 @@ public interface CardSequenceType {
 	
 	/**
 	 * @return number of cards in the sequence
-	 * Can be overwritten if there is a faster way to compute
 	 */
-	public default int size() {
-		int size = 0;
-		Iterator<Card> iterator = getSequenceIterator();
-		while( iterator.hasNext() ) {
-			iterator.next();
-			size++;
-		}
-		return size;
-	}
+	public int size();
 	
 }

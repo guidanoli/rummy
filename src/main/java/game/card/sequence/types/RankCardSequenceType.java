@@ -21,10 +21,7 @@ public class RankCardSequenceType implements CardSequenceType {
 			} else if( index >= size ) {
 				sequence.addLast(card);
 			} else {
-				CardSequenceBuilder builder = null;
-				if( canSplit(index) ) {
-					builder = split(index);
-				}
+				CardSequenceBuilder builder = split(index);
 				sequence.add(card);
 				return builder;
 			}
@@ -78,7 +75,7 @@ public class RankCardSequenceType implements CardSequenceType {
 	public CardSequenceBuilder split(int index) {
 		int size = size();
 		CardSequenceBuilder builder = new CardSequenceBuilder()
-				.setType(new RankCardSequenceType());
+				.setType(() -> new RankCardSequenceType());
 		for( int i = index; i < size; i++ ) {
 			Card removedCard = sequence.remove(index);
 			builder.addCard(removedCard);
@@ -98,6 +95,26 @@ public class RankCardSequenceType implements CardSequenceType {
 		return first.compareRanks(second) == -1;
 	}
 
+	public boolean addCardSet(Set<Card> cardSet) {
+		Set<Card> clone = new HashSet<Card>(cardSet);
+		while( !clone.isEmpty() ) {
+			Iterator<Card> iterator = clone.iterator();
+			Card lowestCard = iterator.next();
+			while( iterator.hasNext() ) {
+				Card currentCard = iterator.next();
+				if( currentCard.compareRanks(lowestCard) < 0 ) {
+					lowestCard = currentCard;
+				}
+			}
+			if( !canAdd(lowestCard) ) {
+				return false;
+			}
+			add(lowestCard);
+			clone.remove(lowestCard);
+		}
+		return true;
+	}
+	
 	@Override
 	public int size() {
 		return sequence.size();

@@ -129,7 +129,7 @@ public class CardSequence {
 			}
 			return !anotherIterator.hasNext();
 		}
-		return this == o;
+		return false;
 	}
 	
 	/**

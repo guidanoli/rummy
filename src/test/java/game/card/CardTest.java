@@ -147,6 +147,14 @@ class CardTest {
 			assertTrue(targetCard.equals(new Card(CardRank.ACE, CardSuit.SPADES)),
 					() -> "of same ranks and suits should return true");
 		}
+
+		@Test
+		@DisplayName("when comparing a card and another object")
+		void testNotEqual() {
+			Card card = new Card(CardRank.ACE, CardSuit.SPADES);
+			Object o = new Object();
+			assertFalse(card.equals(o), () -> "should return false");
+		}
 		
 	}
 	

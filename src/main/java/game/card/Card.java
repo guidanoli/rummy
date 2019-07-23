@@ -99,7 +99,7 @@ public class Card {
 			Card card = (Card) o;
 			return equalRanks(card) && equalSuits(card);
 		}
-		return this == o;
+		return false;
 	}
 	
 	/**

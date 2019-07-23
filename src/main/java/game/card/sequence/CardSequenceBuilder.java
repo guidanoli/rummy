@@ -1,11 +1,11 @@
 package game.card.sequence;
 
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Set;
 
 import game.card.Card;
 import game.card.sequence.types.CardSequenceType;
+import game.card.sequence.types.CardSequenceTypeSupplier;
 
 /**
  * A card sequence builder is responsible for building 
@@ -18,9 +18,9 @@ import game.card.sequence.types.CardSequenceType;
  */
 public class CardSequenceBuilder {
 		
-	private CardSequenceType sequenceType;
+	private CardSequenceTypeSupplier sequenceTypeSupplier;
 	private Set<CardSequenceListener> listeners;
-	private LinkedList<Card> cardList;
+	private Set<Card> cardSet;
 	private boolean allowInstability;
 	
 	/**
@@ -28,7 +28,7 @@ public class CardSequenceBuilder {
 	 */
 	public CardSequenceBuilder() { 
 		listeners = new HashSet<CardSequenceListener>();
-		cardList = new LinkedList<Card>();
+		cardSet = new HashSet<Card>();
 		allowInstability = false;
 	}
 	
@@ -60,18 +60,19 @@ public class CardSequenceBuilder {
 	 * @return this builder
 	 */
 	public CardSequenceBuilder addCard(Card card) {
-		cardList.add(card);
+		cardSet.add(card);
 		return this;
 	}
 	
 	/**
-	 * Sets card sequence type, which is an obligatory field
-	 * @param type - card sequence type
+	 * Sets card sequence type through a supplier, which is an obligatory field
+	 * @param typeSupplier - card sequence type supplier (lambda function)
 	 * @return this builder
 	 * @see CardSequenceType
+	 * @see CardSequenceTypeSupplier
 	 */
-	public CardSequenceBuilder setType(CardSequenceType type) {
-		this.sequenceType = type;
+	public CardSequenceBuilder setType(CardSequenceTypeSupplier typeSupplier) {
+		this.sequenceTypeSupplier = typeSupplier;
 		return this;
 	}
 	
@@ -92,11 +93,13 @@ public class CardSequenceBuilder {
 	 * the card sequence would be unstable and instability is not allowed 
 	 */
 	public CardSequence build() {
-		if( sequenceType == null ) throw new IllegalArgumentException("Undefined card sequence type");
+		if( sequenceTypeSupplier == null ) throw new IllegalArgumentException("Undefined card sequence type");
+		CardSequenceType sequenceType = sequenceTypeSupplier.supply();
 		CardSequence cardSequence = new CardSequence(sequenceType);
+		if( !sequenceType.addCardSet(cardSet) || (!allowInstability && !cardSequence.isStable()) ) {
+			throw new IllegalArgumentException("Invalid card sequence");
+		}
 		for( CardSequenceListener listener : listeners ) cardSequence.addListener(listener);
-		for( Card card : cardList ) cardSequence.addCard(card);
-		if( !allowInstability && !cardSequence.isStable() ) throw new IllegalArgumentException("Invalid card sequence");
 		return cardSequence;
 	}
 		
