@@ -262,7 +262,6 @@ class RankCardSequenceTest implements CardSequenceListener {
 					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
 					.addCard(new Card(CardRank.FOUR, CardSuit.SPADES))
 					.addCard(new Card(CardRank.FIVE, CardSuit.SPADES))
-					.allowInstability(true)
 					.build();
 			CardSequence secondSequence = newSequenceBuilder(listener)
 					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
@@ -270,7 +269,6 @@ class RankCardSequenceTest implements CardSequenceListener {
 					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
 					.addCard(new Card(CardRank.FOUR, CardSuit.SPADES))
 					.addCard(new Card(CardRank.FIVE, CardSuit.SPADES))
-					.allowInstability(true)
 					.build();
 			assertAll(
 					"should return true",
@@ -622,7 +620,6 @@ class RankCardSequenceTest implements CardSequenceListener {
 					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
 					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
 					.addCard(new Card(CardRank.FOUR, CardSuit.SPADES))
-					.allowInstability(true)
 					.build();
 			int initialSize = sequence.size();
 			assertAll(
@@ -645,7 +642,6 @@ class RankCardSequenceTest implements CardSequenceListener {
 					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
 					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
 					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
-					.allowInstability(true)
 					.build();
 			assertTrue(sequence.removeCard(new Card(CardRank.ACE, CardSuit.SPADES)),
 					() -> "should return true");
@@ -671,7 +667,6 @@ class RankCardSequenceTest implements CardSequenceListener {
 					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
 					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
 					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
-					.allowInstability(true)
 					.build();
 			assertTrue(sequence.removeCard(new Card(CardRank.TWO, CardSuit.SPADES)),
 					() -> "should return true");
@@ -706,7 +701,6 @@ class RankCardSequenceTest implements CardSequenceListener {
 					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
 					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
 					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
-					.allowInstability(true)
 					.build();
 			assertTrue(sequence.removeCard(new Card(CardRank.THREE, CardSuit.SPADES)),
 					() -> "should return true");
@@ -723,6 +717,53 @@ class RankCardSequenceTest implements CardSequenceListener {
 					.build();
 			assertEquals(expected, sequence,
 					() -> "should keep cards as is but without last card");
+		}
+		
+		@Test
+		@DisplayName("when partinioning twice a 5-card sequence")
+		void testDoublePartition() {
+			CardSequence sequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
+					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.FOUR, CardSuit.SPADES))
+					.addCard(new Card(CardRank.FIVE, CardSuit.SPADES))
+					.build();
+			assertTrue(sequence.removeCard(new Card(CardRank.TWO, CardSuit.SPADES)),
+					() -> "should allow the removal of the second card");
+			assertEquals(1, sequence.size(),
+					() -> "should render the main sequence down to one card");
+			assertEquals(1, removedCardsQueue.size(),
+					() -> "should notify that a card has been removed");
+			assertEquals(new Card(CardRank.TWO, CardSuit.SPADES), removedCardsQueue.remove(0),
+					() -> "should output in the removed card queue the card just removed");
+			assertEquals(1, addedSequencesQueue.size(),
+					() -> "should notify that a card sequence has been added");
+			CardSequence newSequence = addedSequencesQueue.remove(0);
+			CardSequence expected = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.FOUR, CardSuit.SPADES))
+					.addCard(new Card(CardRank.FIVE, CardSuit.SPADES))
+					.build();
+			assertEquals(expected, newSequence,
+					() -> "should output in the added sequences the sequence after the removed card");
+			assertTrue(newSequence.removeCard(new Card(CardRank.FOUR, CardSuit.SPADES)),
+					() -> "should allow the removal of the fourth card");
+			assertEquals(1, newSequence.size(),
+					() -> "should render the new sequence down to one card");
+			assertEquals(1, removedCardsQueue.size(),
+					() -> "should notify that a card has been removed");
+			assertEquals(new Card(CardRank.FOUR, CardSuit.SPADES), removedCardsQueue.remove(0),
+					() -> "should output in the removed card queue the card just removed");
+			assertEquals(1, addedSequencesQueue.size(),
+					() -> "should notify that a card sequence has been added");
+			CardSequence anotherSequence = addedSequencesQueue.remove(0);
+			CardSequence anotherExcepted = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.FIVE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			assertEquals(anotherExcepted, anotherSequence,
+					() -> "should output in the added sequences the sequence after the removed card");
 		}
 		
 	}
