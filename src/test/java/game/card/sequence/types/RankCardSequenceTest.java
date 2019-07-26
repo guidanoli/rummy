@@ -46,32 +46,6 @@ class RankCardSequenceTest implements CardSequenceListener {
 		class throwsException {
 			
 			@Test
-			@DisplayName("when instability is not allowed and type is not defined")
-			void testStableUndefinedType() {
-				CardSequenceBuilder builder = new CardSequenceBuilder();
-				assertThrows(IllegalArgumentException.class,
-						() -> builder.build());
-			}
-			
-			@Test
-			@DisplayName("when instability is allowed and type is not defined")
-			void testUnstableUndefinedType() {
-				CardSequenceBuilder builder = new CardSequenceBuilder()
-						.allowInstability(true);
-				assertThrows(IllegalArgumentException.class,
-						() -> builder.build());
-			}
-			
-			@Test
-			@DisplayName("when does not have cards")
-			void testNoCard() {
-				CardSequenceBuilder builder = new CardSequenceBuilder()
-						.setType(() -> new RankCardSequenceType());
-				assertThrows(IllegalArgumentException.class,
-						() -> builder.build());
-			}
-			
-			@Test
 			@DisplayName("when has one card")
 			void testOneCard() {
 				CardSequenceBuilder builder = new CardSequenceBuilder()
@@ -123,15 +97,6 @@ class RankCardSequenceTest implements CardSequenceListener {
 		class DoesNotThrowException {
 			
 			@Test
-			@DisplayName("when instability is allowed and type is defined")
-			void testUnstableEmpty() {
-				CardSequenceBuilder builder = new CardSequenceBuilder()
-						.allowInstability(true)
-						.setType(() -> new RankCardSequenceType());
-				assertDoesNotThrow(() -> builder.build());
-			}
-			
-			@Test
 			@DisplayName("when instability is allowed and one card is added")
 			void testUnstableOneCard() {
 				CardSequenceBuilder builder = new CardSequenceBuilder()
@@ -174,19 +139,7 @@ class RankCardSequenceTest implements CardSequenceListener {
 			}
 			
 		}
-
-		@Test
-		@DisplayName("when building many sequences from the same builder")
-		void testMultipleBuildsAreEqual() {
-			CardSequenceBuilder builder = new CardSequenceBuilder()
-					.setType(() -> new RankCardSequenceType())
-					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
-					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
-					.addCard(new Card(CardRank.THREE, CardSuit.SPADES));
-			assertEquals(builder.build(), builder.build(),
-					() -> "should build equal sequences");
-		}
-			
+	
 	}
 	
 	@Nested

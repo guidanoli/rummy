@@ -41,7 +41,11 @@ public interface CardSequenceType {
 	public CardSequenceBuilder add(Card card);
 	
 	/**
-	 * Tries to add all the cards in a set
+	 * <p>Tries to add all the cards in a set. Can leave the
+	 * sequence in an unstable state as long as it returns
+	 * false so that a new card sequence be supplied.
+	 * <p>Minimum size does not need to be considered since
+	 * the Builder already deals with it formerly.
 	 * @param cardSet - set of cards to be added
 	 * @return {@code true} if it could add all of the cards and 
 	 * {@code false} otherwise.
