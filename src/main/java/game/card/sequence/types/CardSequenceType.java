@@ -88,16 +88,7 @@ public interface CardSequenceType {
 	 * @return iterator that iterates through all the sequence's cards
 	 */
 	public Iterator<Card> getSequenceIterator();
-	
-	/**
-	 * Checks whether two cards are sequential to one another
-	 * @param first - first card
-	 * @param second - second card
-	 * @return {@code true} if the first card comes right before
-	 * the second card, or {@code false} if else.
-	 */
-	public boolean areSequential(Card first, Card second);
-	
+		
 	/**
 	 * @return number of cards in the sequence
 	 */

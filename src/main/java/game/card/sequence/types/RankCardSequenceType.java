@@ -91,10 +91,6 @@ public class RankCardSequenceType implements CardSequenceType {
 		return sequence.iterator();
 	}
 
-	public boolean areSequential(Card first, Card second) {
-		return first.compareRanks(second) == -1;
-	}
-
 	public boolean addCardSet(Set<Card> cardSet) {
 		Set<Card> clone = new HashSet<Card>(cardSet);
 		while( !clone.isEmpty() ) {

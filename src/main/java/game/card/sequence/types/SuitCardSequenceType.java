@@ -81,12 +81,6 @@ public class SuitCardSequenceType implements CardSequenceType, Comparator<Card> 
 		return sequence.iterator();
 	}
 
-	public boolean areSequential(Card first, Card second) {
-		return first.equalRanks(second) && !first.equalSuits(second);
-		// since there is no logical sequence, the definition is
-		// symmetric (a = b -> b = a ^ a != b -> b != a).
-	}
-
 	public int size() {
 		return sequence.size();
 	}

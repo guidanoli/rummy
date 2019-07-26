@@ -138,21 +138,7 @@ public class CardSequence {
 	 * has 3 or more cards and does not present an invalid state
 	 */
 	public boolean isStable() {
-		return hasValidState() && size() >= 3;
-	}
-	
-	/**
-	 * @return {@code true} if one card is sequential to the next
-	 */
-	protected boolean hasValidState() {
-		Iterator<Card> iterator = type.getSequenceIterator();
-		Card prev = null, curr = null;
-		while( iterator.hasNext() ) {
-			curr = iterator.next();
-			if( curr == null || (prev != null && !type.areSequential(prev,curr)) ) return false;
-			prev = curr;
-		}
-		return true;
+		return size() >= 3;
 	}
 	
 	/**
