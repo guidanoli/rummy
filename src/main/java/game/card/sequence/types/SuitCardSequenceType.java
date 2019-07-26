@@ -1,9 +1,11 @@
 package game.card.sequence.types;
 
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import game.card.Card;
 import game.card.sequence.CardSequenceBuilder;
@@ -23,9 +25,9 @@ import game.card.sequence.CardSequenceBuilder;
  * @author guidanoli
  *
  */
-public class SuitCardSequenceType implements CardSequenceType {
+public class SuitCardSequenceType implements CardSequenceType, Comparator<Card> {
 
-	private Set<Card> sequence = new HashSet<Card>();
+	private SortedSet<Card> sequence = new TreeSet<Card>(this);
 	
 	public boolean canAdd(Card card) {
 		if(sequence.isEmpty()) return true;
@@ -87,6 +89,10 @@ public class SuitCardSequenceType implements CardSequenceType {
 
 	public int size() {
 		return sequence.size();
+	}
+
+	public int compare(Card first, Card second) {
+		return first.compareSuits(second);
 	}
 
 }

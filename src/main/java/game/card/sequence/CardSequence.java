@@ -3,6 +3,7 @@ package game.card.sequence;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import game.card.Card;
 import game.card.sequence.types.CardSequenceType;
@@ -190,6 +191,17 @@ public class CardSequence {
 		for( CardSequenceListener listener : listeners ) {
 			caller.call(listener);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		StringJoiner cardStrings = new StringJoiner(", ");
+		Iterator<Card> iterator = type.getSequenceIterator();
+		while( iterator.hasNext() ) {
+			Card curr = iterator.next();
+			cardStrings.add(curr.toString());
+		}
+		return String.format("[%s]", cardStrings.toString());
 	}
 		
 }

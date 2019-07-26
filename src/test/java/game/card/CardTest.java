@@ -99,6 +99,31 @@ class CardTest {
 	}
 	
 	@Nested
+	@DisplayName("the compareSuits method")
+	class CompareSuitsTest {
+		
+		@Test
+		@DisplayName("when comparing two cards")
+		void testCompareAllSuits() {
+			CardSuit firstCardSuit = CardSuit.HEARTS;
+			for( CardSuit secondCardSuit : CardSuit.values() ) {
+				Card firstCard = new Card(CardRank.ACE,firstCardSuit);
+				Card secondCard = new Card(CardRank.TWO,secondCardSuit);
+				if( !firstCard.equalSuits(secondCard) ) {
+					assertNotEquals( 0,
+							firstCard.compareSuits(secondCard),
+							() -> "should return a value different from zero for different suits");
+				} else {
+					assertEquals( 0,
+							firstCard.compareSuits(secondCard),
+							() -> "should return zero for the same suit");
+				}
+			}
+		}
+		
+	}
+	
+	@Nested
 	@DisplayName("the equalSuits method")
 	class EqualSuitsTest {
 		
@@ -194,5 +219,25 @@ class CardTest {
 		
 	}
 	
+	@Nested
+	@DisplayName("the hashCode method")
+	class HashCodeTest {
+		
+		@Test
+		@DisplayName("when comparing the same object")
+		void testHashIdentity() {		
+			for( CardRank rank : CardRank.values() ) {
+				for( CardSuit suit : CardSuit.values() ) {
+					Card card = new Card(rank,suit);
+					Card otherCard = new Card(rank,suit);
+					assertEquals( card.hashCode(),
+							otherCard.hashCode(),
+							() -> "should return the same value" );
+				}
+			}
+		}
+		
+	}
+		
 
 }

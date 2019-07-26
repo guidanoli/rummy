@@ -1,5 +1,7 @@
 package game.card;
 
+import java.util.Objects;
+
 import game.card.sequence.CardSequence;
 
 /**
@@ -54,6 +56,16 @@ public class Card {
 					getRank().toString(),
 					getSuit().toString()
 				);
+	}
+	
+	/**
+	 * Compare cards' suits in quantitative means
+	 * @param anotherCard - another card
+	 * @return arbitrary comparison between suits for
+	 * sorting reasons only
+	 */
+	public int compareSuits(Card anotherCard) {
+		return getSuit().compareTo(anotherCard.getSuit());
 	}
 	
 	/**
@@ -117,4 +129,9 @@ public class Card {
 				!getSuit().equals(anotherCard.getSuit()));
 	}
 		
+	@Override
+	public int hashCode() {
+		return Objects.hash(getRank(), getSuit());
+	}
+	
 }

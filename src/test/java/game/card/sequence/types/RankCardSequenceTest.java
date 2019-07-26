@@ -262,9 +262,6 @@ class RankCardSequenceTest implements CardSequenceListener {
 			
 		}
 		
-		// TODO: Compare card sequences of different types
-		// on a separate test file called CardSequenceTest
-		
 	}
 
 	@Nested
