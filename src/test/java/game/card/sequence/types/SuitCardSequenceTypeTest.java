@@ -3,10 +3,13 @@ package game.card.sequence.types;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import game.card.Card;
@@ -16,6 +19,7 @@ import game.card.sequence.CardSequence;
 import game.card.sequence.CardSequenceBuilder;
 import game.card.sequence.CardSequenceListener;
 
+@DisplayName("On the SuitCardSequence class")
 class SuitCardSequenceTypeTest implements CardSequenceListener {
 
 	private CardSequenceListener listener;
@@ -169,6 +173,197 @@ class SuitCardSequenceTypeTest implements CardSequenceListener {
 			
 		}
 			
+	}
+	
+	@Nested
+	@DisplayName("the equals method")
+	class EqualTest {
+				
+		@Test
+		@DisplayName("when comparing two empty sequences")
+		void testEmptySequencesEqual() {
+			CardSequence firstSequence = newSequenceBuilder(listener).allowInstability(true).build();
+			CardSequence secondSequence = newSequenceBuilder(listener).allowInstability(true).build();
+			assertAll(
+					"should return true",
+					() -> assertEquals(firstSequence,secondSequence),
+					() -> assertEquals(secondSequence,firstSequence),
+					() -> assertEquals(firstSequence,firstSequence)
+					);
+		}
+				
+		@Test
+		@DisplayName("when comparing a sequence to another object")
+		void testObjectEqual() {
+			CardSequence sequence = newSequenceBuilder(listener)
+					.allowInstability(true)
+					.build();
+			Object o = new Object();
+			assertNotEquals(sequence, o,
+					() -> "should return false");
+		}
+		
+		@Test
+		@DisplayName("when comparing two sequences with the same card (one each)")
+		void testSequencesWithSameCardEqual() {
+			CardSequence firstSequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			CardSequence secondSequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			assertAll(
+					"should return true",
+					() -> assertEquals(firstSequence,secondSequence),
+					() -> assertEquals(secondSequence,firstSequence)
+					);
+		}
+		
+		@Test
+		@DisplayName("when comparing two sequences with different cards (one each)")
+		void testSequencesWithDifferentCardsEqual() {
+			CardSequence firstSequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			CardSequence secondSequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			assertAll(
+					"should return false",
+					() -> assertNotEquals(firstSequence,secondSequence),
+					() -> assertNotEquals(secondSequence,firstSequence)
+					);
+		}
+		
+		@Test
+		@DisplayName("when comparing two sequences with the same cards (multiple)")
+		void testSequencesWithSameMultipleCardsEqual() {
+			CardSequence firstSequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.ACE, CardSuit.HEARTS))
+					.addCard(new Card(CardRank.ACE, CardSuit.DIAMONDS))
+					.build();
+			CardSequence secondSequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.ACE, CardSuit.HEARTS))
+					.addCard(new Card(CardRank.ACE, CardSuit.DIAMONDS))
+					.build();
+			assertAll(
+					"should return true",
+					() -> assertEquals(firstSequence,secondSequence),
+					() -> assertEquals(secondSequence,firstSequence)
+					);
+		}
+		
+		@Test
+		@DisplayName("when comparing two sequences with different cards (multiple)")
+		void testSequencesWithDifferentMultipleCardsEqual() {
+			CardSequence firstSequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			CardSequence secondSequence = newSequenceBuilder(listener)
+					.allowInstability(true)
+					.build();
+			assertAll(
+					"should return false",
+					() -> assertNotEquals(firstSequence,secondSequence),
+					() -> assertNotEquals(secondSequence,firstSequence)
+					);
+			secondSequence.addCard(new Card(CardRank.ACE, CardSuit.SPADES));
+			firstSequence.addCard(new Card(CardRank.ACE, CardSuit.HEARTS));
+			assertAll(
+					"should return false",
+					() -> assertNotEquals(firstSequence,secondSequence),
+					() -> assertNotEquals(secondSequence,firstSequence)
+					);
+			secondSequence.addCard(new Card(CardRank.ACE, CardSuit.HEARTS));
+			firstSequence.addCard(new Card(CardRank.ACE, CardSuit.DIAMONDS));
+			assertAll(
+					"should return false",
+					() -> assertNotEquals(firstSequence,secondSequence),
+					() -> assertNotEquals(secondSequence,firstSequence)
+					);
+			
+		}
+		
+	}
+	
+
+	@Nested
+	@DisplayName("the addCard method")
+	class AddCardTest {
+		
+		private CardSequenceBuilder builder;
+		
+		@BeforeEach
+		void init() {
+			addedSequencesQueue.clear();
+			emptySequencesQueue.clear();
+			removedCardsQueue.clear();
+			builder = newSequenceBuilder(listener);
+		}
+				
+		@RepeatedTest(name = "Adding {currentRepetition} cards", value = 4)
+		void testAddingCards(RepetitionInfo info) {
+			final int n = info.getCurrentRepetition();
+			final Card [] cards = { 
+					new Card(CardRank.ACE, CardSuit.SPADES),
+					new Card(CardRank.ACE, CardSuit.HEARTS),
+					new Card(CardRank.ACE, CardSuit.CLUBS),
+					new Card(CardRank.ACE, CardSuit.DIAMONDS)
+			};
+			boolean [] present = new boolean[n];
+			CardSequence sequence = builder.allowInstability(true).build();
+			for(int i = 0; i < n; i++) {
+				final int j = i;
+				assertTrue(sequence.addCard(cards[i]),
+						() -> "should add "+cards[j].toString()+" successfully to the sequence");
+			}
+			assertEquals(n, sequence.size(),
+					() -> "it should add "+n+" cards exactly");
+			Iterator<Card> iterator = sequence.iterator();
+			for(int i = 0; i < n; i++) {
+				assertTrue(iterator.hasNext(),
+						() -> "it should add "+n+" cards exactly");
+				final Card curr = iterator.next(); 
+				for(int j = 0; j < n; j++) {
+					if( cards[j].equals(curr) ) {
+						assertFalse(present[j],
+								() -> "should not have duplicates" );
+						present[j] = true;
+					}
+				}
+			}
+			assertFalse(iterator.hasNext(),
+					() -> "it should add "+n+" cards exactly");
+			for(int i = 0; i < present.length; i++) {
+				final Card curr = cards[i];
+				assertTrue(present[i],
+						() -> String.format("should contain card '%s'", curr.toString()));
+			}
+		}
+
+		@Test
+		@DisplayName("when adding an illegal card in a sequence")
+		void testAddingIllegalCardInMiddle() {
+			CardSequence sequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.ACE, CardSuit.HEARTS))
+					.addCard(new Card(CardRank.ACE, CardSuit.CLUBS))
+					.build();
+			assertAll(
+					"should return false",
+					() -> assertFalse(sequence.addCard(new Card(CardRank.TWO, CardSuit.HEARTS))),
+					() -> assertFalse(sequence.addCard(new Card(CardRank.TWO, CardSuit.DIAMONDS))),
+					() -> assertFalse(sequence.addCard(new Card(CardRank.ACE, CardSuit.SPADES)))
+					);
+		}
+				
 	}
 	
 	/* Listener methods */

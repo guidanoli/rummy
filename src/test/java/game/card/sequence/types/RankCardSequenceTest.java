@@ -153,9 +153,9 @@ class RankCardSequenceTest implements CardSequenceListener {
 			CardSequence secondSequence = newSequenceBuilder(listener).allowInstability(true).build();
 			assertAll(
 					"should return true",
-					() -> assertTrue(firstSequence.equals(secondSequence)),
-					() -> assertTrue(secondSequence.equals(firstSequence)),
-					() -> assertTrue(firstSequence.equals(firstSequence))
+					() -> assertEquals(firstSequence,secondSequence),
+					() -> assertEquals(secondSequence,firstSequence),
+					() -> assertEquals(firstSequence,firstSequence)
 					);
 		}
 				
@@ -166,7 +166,7 @@ class RankCardSequenceTest implements CardSequenceListener {
 					.allowInstability(true)
 					.build();
 			Object o = new Object();
-			assertFalse(sequence.equals(o),
+			assertNotEquals(sequence, o,
 					() -> "should return false");
 		}
 		
@@ -183,8 +183,8 @@ class RankCardSequenceTest implements CardSequenceListener {
 					.build();
 			assertAll(
 					"should return true",
-					() -> assertTrue(firstSequence.equals(secondSequence)),
-					() -> assertTrue(secondSequence.equals(firstSequence))
+					() -> assertEquals(firstSequence,secondSequence),
+					() -> assertEquals(secondSequence,firstSequence)
 					);
 		}
 		
@@ -201,8 +201,8 @@ class RankCardSequenceTest implements CardSequenceListener {
 					.build();
 			assertAll(
 					"should return false",
-					() -> assertFalse(firstSequence.equals(secondSequence)),
-					() -> assertFalse(secondSequence.equals(firstSequence))
+					() -> assertNotEquals(firstSequence,secondSequence),
+					() -> assertNotEquals(secondSequence,firstSequence)
 					);
 		}
 		
@@ -225,8 +225,8 @@ class RankCardSequenceTest implements CardSequenceListener {
 					.build();
 			assertAll(
 					"should return true",
-					() -> assertTrue(firstSequence.equals(secondSequence)),
-					() -> assertTrue(secondSequence.equals(firstSequence))
+					() -> assertEquals(firstSequence,secondSequence),
+					() -> assertEquals(secondSequence,firstSequence)
 					);
 		}
 		
@@ -293,9 +293,11 @@ class RankCardSequenceTest implements CardSequenceListener {
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add one card exactly");
-				assertTrue(cards[i].equals(iterator.next()),
+				assertEquals(cards[i], iterator.next(),
 						() -> "the card should be found on the iterator");
 			}
+			assertFalse(iterator.hasNext(),
+					() -> "it should add one card exactly");
 		}
 		
 		@Test
@@ -314,7 +316,7 @@ class RankCardSequenceTest implements CardSequenceListener {
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add two cards exactly");
-				assertTrue(cards[i].equals(iterator.next()),
+				assertEquals(cards[i], iterator.next(),
 						() -> "the cards should be found on the iterator");
 			}
 		}
@@ -335,7 +337,7 @@ class RankCardSequenceTest implements CardSequenceListener {
 			for(int i = cards.length - 1; i >= 0; i--) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add two cards exactly");
-				assertTrue(cards[i].equals(iterator.next()),
+				assertEquals(cards[i], iterator.next(),
 						() -> "the cards should be found on the iterator");
 			}
 		}
@@ -357,7 +359,7 @@ class RankCardSequenceTest implements CardSequenceListener {
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add three cards exactly");
-				assertTrue(cards[i].equals(iterator.next()),
+				assertEquals(cards[i], iterator.next(),
 						() -> "the cards should be found on the iterator");
 			}
 		}
@@ -379,7 +381,7 @@ class RankCardSequenceTest implements CardSequenceListener {
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add three cards exactly");
-				assertTrue(cards[i].equals(iterator.next()),
+				assertEquals(cards[i], iterator.next(),
 						() -> "the cards should be found on the iterator");
 			}
 			assertFalse(iterator.hasNext(),
@@ -401,7 +403,7 @@ class RankCardSequenceTest implements CardSequenceListener {
 			Iterator<Card> iterator = sequence.iterator();
 			assertTrue(iterator.hasNext(),
 					() -> "it should add one card exactly");
-			assertTrue(cards[0].equals(iterator.next()),
+			assertEquals(cards[0], iterator.next(),
 					() -> "the card should be found on the iterator");
 			assertFalse(iterator.hasNext(),
 					() -> "it should add one card exactly");
@@ -422,7 +424,7 @@ class RankCardSequenceTest implements CardSequenceListener {
 			Iterator<Card> iterator = sequence.iterator();
 			assertTrue(iterator.hasNext(),
 					() -> "it should add one card exactly");
-			assertTrue(cards[0].equals(iterator.next()),
+			assertEquals(cards[0], iterator.next(),
 					() -> "the king should be found on the iterator");
 			assertFalse(iterator.hasNext(),
 					() -> "it should add one cards exactly");
@@ -452,8 +454,8 @@ class RankCardSequenceTest implements CardSequenceListener {
 			for(int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add all five cards exactly");
-				assertTrue(cards[i].equals(iterator.next()),
-						() -> "the cards should be found on the iterator");
+				assertEquals(cards[i], iterator.next(),
+						() -> "the card should be found on the iterator");
 			}
 			assertFalse(iterator.hasNext(),
 					() -> "it should add five cards exactly");

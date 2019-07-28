@@ -11,6 +11,7 @@ import game.card.CardRank;
 import game.card.CardSuit;
 import game.card.sequence.types.RankCardSequenceType;
 
+@DisplayName("On the CardSequenceBuilder class")
 class CardSequenceBuilderTest {
 
 	@Nested

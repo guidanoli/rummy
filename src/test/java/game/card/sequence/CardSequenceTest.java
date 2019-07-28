@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import game.card.*;
 import game.card.sequence.types.*;
 
+@DisplayName("On the CardSequence class")
 class CardSequenceTest {
 
 	@Nested

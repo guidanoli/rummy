@@ -85,6 +85,10 @@ public interface CardSequenceType {
 	public CardSequenceBuilder split(int index);
 	
 	/**
+	 * <p>An iterator later used to compare two sequences. Thus, any
+	 * implementation has to ensure that a sequence always outputs
+	 * the same iterator. Thus, if the cards are arranged in a set,
+	 * an arbitrary order/comparator has to be established.
 	 * @return iterator that iterates through all the sequence's cards
 	 */
 	public Iterator<Card> getSequenceIterator();
