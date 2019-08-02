@@ -86,7 +86,7 @@ public class SuitCardSequenceType implements CardSequenceType, Comparator<Card> 
 	}
 
 	public int compare(Card first, Card second) {
-		return first.compareSuits(second);
+		return first.compare(second);
 	}
 
 }

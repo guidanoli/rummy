@@ -23,6 +23,9 @@ public class Card {
 	private CardRank rank;
 	private CardSuit suit;
 	
+	/* auxiliary constants */
+	private final static int numOfSuits = CardSuit.values().length;
+	
 	/**
 	 * Constructs a card object
 	 * @param rank - card rank
@@ -128,10 +131,25 @@ public class Card {
 				(getRank().equals(anotherCard.getRank()) &&
 				!getSuit().equals(anotherCard.getSuit()));
 	}
-		
+	
+	/**
+	 * Creates a hash for the card concerning its suit and rank
+	 * @return hash code
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(getRank(), getSuit());
+	}
+	
+	/**
+	 * <p>Compares two cards such that for every card {@code c}, the following always holds:
+	 * <ul><li>For every card {@code e}, only when {@code e == c}, {@code compare(e) == 0}.</li>
+	 * <li>For every card {@code f} and {@code g}, {@code compare(f) == compare(g)} only if {@code f==g}.</li></ul>
+	 * @param anotherCard - another card
+	 * @return the delta concerning suit and rank between the two cards
+	 */
+	public int compare(Card anotherCard) {
+		return compareSuits(anotherCard) + numOfSuits * compareRanks(anotherCard);
 	}
 	
 }

@@ -308,7 +308,7 @@ class SuitCardSequenceTypeTest implements CardSequenceListener {
 			builder = newSequenceBuilder(listener);
 		}
 				
-		@RepeatedTest(name = "Adding {currentRepetition} cards", value = 4)
+		@RepeatedTest(name = "when adding {currentRepetition} cards", value = 4)
 		void testAddingCards(RepetitionInfo info) {
 			final int n = info.getCurrentRepetition();
 			final Card [] cards = { 
@@ -364,6 +364,138 @@ class SuitCardSequenceTypeTest implements CardSequenceListener {
 					);
 		}
 				
+	}
+	
+	@Nested
+	@DisplayName("the removeCard method")
+	class RemoveCardTest {
+				
+		@Test
+		@DisplayName("when removing a card from an empty sequence")
+		void testEmptySequence() {
+			CardSequence sequence = newSequenceBuilder(listener)
+					.allowInstability(true)
+					.build();
+			assertFalse(sequence.removeCard(new Card(CardRank.ACE, CardSuit.SPADES)),
+					() -> "should return false");
+			assertEquals(0, sequence.size(),
+					() -> "should not change the sequence size");
+			assertEquals(0, removedCardsQueue.size(),
+					() -> "should not notify that a card has been removed");
+			assertEquals(0, addedSequencesQueue.size(),
+					() -> "should not notify that a sequence has been added");
+		}
+		
+		@Test
+		@DisplayName("when removing the only card from a sequence")
+		void testSingleCard() {
+			CardSequence sequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.allowInstability(true)
+					.build();
+			assertTrue(sequence.removeCard(new Card(CardRank.ACE, CardSuit.SPADES)),
+					() -> "should return true");
+			assertEquals(0, sequence.size(),
+					() -> "should empty the sequence");
+			assertEquals(1, removedCardsQueue.size(),
+					() -> "should notify that the card has been removed");
+			assertEquals(0, addedSequencesQueue.size(),
+					() -> "should not notify that a sequence has been added");
+		}
+		
+
+		@Test
+		@DisplayName("when trying to remove a card that's not in a sequence")
+		void testSingleWrongCard() {
+			CardSequence sequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
+					.addCard(new Card(CardRank.TWO, CardSuit.HEARTS))
+					.addCard(new Card(CardRank.TWO, CardSuit.DIAMONDS))
+					.build();
+			int initialSize = sequence.size();
+			assertAll(
+					"should return false",
+					() -> assertFalse(sequence.removeCard(new Card(CardRank.TWO, CardSuit.CLUBS)),
+							() -> "when has rank but not suit"),
+					() -> assertFalse(sequence.removeCard(new Card(CardRank.ACE, CardSuit.SPADES)),
+							() -> "when has suit but not rank (before)"),
+					() -> assertFalse(sequence.removeCard(new Card(CardRank.FIVE, CardSuit.SPADES)),
+							() -> "when has suit but not rank (after)"),
+					() -> assertFalse(sequence.removeCard(new Card(CardRank.ACE, CardSuit.CLUBS)),
+							() -> "when has neither rank or suit")
+			);
+			assertEquals(initialSize, sequence.size(),
+					() -> "should not remove any cards");
+			assertEquals(0, removedCardsQueue.size(),
+					() -> "should not notify that a card has been removed");
+			assertEquals(0, addedSequencesQueue.size(),
+					() -> "should not notify that a sequence has been added");
+		}
+		
+		@Test
+		@DisplayName("when removing a card from a triple")
+		void testFromTriple() {
+			CardSequence sequence = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+					.addCard(new Card(CardRank.ACE, CardSuit.HEARTS))
+					.addCard(new Card(CardRank.ACE, CardSuit.DIAMONDS))
+					.build();
+			int initialSize = sequence.size();
+			Card removedCard = new Card(CardRank.ACE, CardSuit.SPADES);
+			assertTrue(sequence.removeCard(removedCard),
+					() -> "should return false");
+			assertEquals(initialSize - 1, sequence.size(),
+					() -> "should drop down the sequence size by one");
+			assertEquals(1, removedCardsQueue.size(),
+					() -> "should notify that a card has been removed");
+			assertEquals(0, addedSequencesQueue.size(),
+					() -> "should not notify that a sequence has been added");
+			assertEquals(removedCard, removedCardsQueue.remove(0),
+					() -> "should output in the removed card queue the card just removed");
+			CardSequence expected = newSequenceBuilder(listener)
+					.addCard(new Card(CardRank.ACE, CardSuit.HEARTS))
+					.addCard(new Card(CardRank.ACE, CardSuit.DIAMONDS))
+					.allowInstability(true)
+					.build();
+			assertEquals(expected, sequence,
+					() -> "should render the sequence down to the two remaining cards");
+		}
+		
+		@RepeatedTest(name = "when removing suit {currentRepetition}/{totalRepetitions} from complete suit sequence", value = 4)
+		@DisplayName("when removing a card from a suit sequence of four")
+		void testFromFour(RepetitionInfo info) {
+			CardRank rank = CardRank.ACE;
+			CardSequence sequence = newSequenceBuilder(listener)
+					.addCard(new Card(rank, CardSuit.SPADES))
+					.addCard(new Card(rank, CardSuit.HEARTS))
+					.addCard(new Card(rank, CardSuit.CLUBS))
+					.addCard(new Card(rank, CardSuit.DIAMONDS))
+					.build();
+			int suitId = info.getCurrentRepetition() - 1;
+			CardSuit suit = CardSuit.values()[suitId];
+			int initialSize = sequence.size();
+			Card removedCard = new Card(rank, suit);
+			assertTrue(sequence.removeCard(removedCard),
+					() -> "should remove card successfully");
+			assertEquals(initialSize - 1, sequence.size(),
+					() -> "should drop down the sequence size by one");
+			CardSequenceBuilder builder = newSequenceBuilder(listener);
+			for(CardSuit cardSuit : CardSuit.values()) {
+				if( !cardSuit.equals(suit) ) {
+					builder.addCard(new Card(rank, cardSuit));
+				}
+			}
+			CardSequence expected = builder.build();
+			assertEquals(expected, sequence,
+					() -> "should leave the sequence with the rest of the cards");
+			assertEquals(1, removedCardsQueue.size(),
+					() -> "should notify that a card has been removed");
+			assertEquals(0, addedSequencesQueue.size(),
+					() -> "should not notify that a sequence has been added");
+			assertEquals(removedCard, removedCardsQueue.remove(0),
+					() -> "should output in the removed card queue the card just removed");
+		}
+		
 	}
 	
 	/* Listener methods */
