@@ -224,8 +224,8 @@ class CardTest {
 	class HashCodeTest {
 		
 		@Test
-		@DisplayName("when comparing the same object")
-		void testHashIdentity() {		
+		@DisplayName("when hashing the same card")
+		void testHashSame() {		
 			for( CardRank rank : CardRank.values() ) {
 				for( CardSuit suit : CardSuit.values() ) {
 					Card card = new Card(rank,suit);
@@ -237,7 +237,63 @@ class CardTest {
 			}
 		}
 		
+		@Test
+		@DisplayName("when hashing different cards")
+		void testHashDifferent() {
+			CardRank [] ranks = CardRank.values();
+			CardSuit [] suits = CardSuit.values();
+			for( int i = 0 ; i < ranks.length; i++ ) {
+				for( int j = 0 ; j < suits.length; j++ ) {
+					Card firstCard = new Card(ranks[i], suits[j]);
+					for( int k = i+1; k < ranks.length; k++ ) {
+						for( int l = j+1; l < suits.length; l++ ) {
+							Card secondCard = new Card(ranks[k], suits[l]);
+							assertNotEquals(firstCard.hashCode(), secondCard.hashCode(),
+									() -> "should return different values");
+						}
+					}
+				}
+			}
+		}
+				
 	}
+	
+	@Nested
+	@DisplayName("the compare method")
+	class CompareTest {
 		
+		@Test
+		@DisplayName("when comparing the same card")
+		void testCompareSame() {
+			for( CardRank rank : CardRank.values() ) {
+				for( CardSuit suit : CardSuit.values() ) {
+					Card card = new Card(rank,suit);
+					Card otherCard = new Card(rank,suit);
+					assertEquals(0, card.compare(otherCard),
+							() -> "should return 0");
+				}
+			}
+		}
+		
+		@Test
+		@DisplayName("when comparing different cards")
+		void testCompareDifferent() {
+			CardRank [] ranks = CardRank.values();
+			CardSuit [] suits = CardSuit.values();
+			for( int i = 0 ; i < ranks.length; i++ ) {
+				for( int j = 0 ; j < suits.length; j++ ) {
+					Card firstCard = new Card(ranks[i], suits[j]);
+					for( int k = i+1; k < ranks.length; k++ ) {
+						for( int l = j+1; l < suits.length; l++ ) {
+							Card secondCard = new Card(ranks[k], suits[l]);
+							assertNotEquals(0, firstCard.compare(secondCard),
+									() -> "should not return 0");
+						}
+					}
+				}
+			}
+		}
+		
+	}
 
 }
