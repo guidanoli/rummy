@@ -2,7 +2,7 @@ package game.card;
 
 import java.util.Objects;
 
-import game.card.sequence.CardSequence;
+import game.sequence.CardSequence;
 
 /**
  * <p>A card always handles two informations: its <b>suit</b>

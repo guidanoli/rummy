@@ -1,4 +1,4 @@
-package game.card.sequence.types;
+package game.sequence.types;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,9 +16,10 @@ import org.junit.jupiter.api.Test;
 import game.card.Card;
 import game.card.CardRank;
 import game.card.CardSuit;
-import game.card.sequence.CardSequence;
-import game.card.sequence.CardSequenceBuilder;
-import game.card.sequence.CardSequenceListener;
+import game.sequence.CardSequence;
+import game.sequence.CardSequenceBuilder;
+import game.sequence.CardSequenceListener;
+import game.sequence.types.SuitCardSequenceType;
 
 @DisplayName("On the SuitCardSequence class")
 class SuitCardSequenceTest implements CardSequenceListener {

@@ -1,4 +1,4 @@
-package game.card.sequence;
+package game.sequence;
 
 import game.card.Card;
 

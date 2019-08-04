@@ -1,4 +1,4 @@
-package game.card.sequence;
+package game.sequence;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import game.card.*;
-import game.card.sequence.types.*;
+import game.sequence.CardSequence;
+import game.sequence.CardSequenceBuilder;
+import game.sequence.types.*;
 
 @DisplayName("On the CardSequence class")
 class CardSequenceTest {

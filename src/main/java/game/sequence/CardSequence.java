@@ -1,4 +1,4 @@
-package game.card.sequence;
+package game.sequence;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -7,7 +7,7 @@ import java.util.StringJoiner;
 import java.util.function.Consumer;
 
 import game.card.Card;
-import game.card.sequence.types.CardSequenceType;
+import game.sequence.types.CardSequenceType;
 
 /**
  * 

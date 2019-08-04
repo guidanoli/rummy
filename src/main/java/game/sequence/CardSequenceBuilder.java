@@ -1,11 +1,11 @@
-package game.card.sequence;
+package game.sequence;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 
 import game.card.Card;
-import game.card.sequence.types.CardSequenceType;
+import game.sequence.types.CardSequenceType;
 
 /**
  * A card sequence builder is responsible for building 

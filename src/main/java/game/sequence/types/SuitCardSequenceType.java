@@ -1,4 +1,4 @@
-package game.card.sequence.types;
+package game.sequence.types;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -8,7 +8,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import game.card.Card;
-import game.card.sequence.CardSequenceBuilder;
+import game.sequence.CardSequenceBuilder;
 
 /**
  * 

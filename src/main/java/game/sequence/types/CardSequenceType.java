@@ -1,10 +1,10 @@
-package game.card.sequence.types;
+package game.sequence.types;
 
 import java.util.Iterator;
 import java.util.Set;
 
 import game.card.Card;
-import game.card.sequence.CardSequenceBuilder;
+import game.sequence.CardSequenceBuilder;
 
 /**
  * 
