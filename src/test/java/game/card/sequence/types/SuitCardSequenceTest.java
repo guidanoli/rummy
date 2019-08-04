@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.function.Supplier;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +21,7 @@ import game.card.sequence.CardSequenceBuilder;
 import game.card.sequence.CardSequenceListener;
 
 @DisplayName("On the SuitCardSequence class")
-class SuitCardSequenceTypeTest implements CardSequenceListener {
+class SuitCardSequenceTest implements CardSequenceListener {
 
 	private CardSequenceListener listener;
 	private final ArrayList<CardSequence> addedSequencesQueue = new ArrayList<CardSequence>();
@@ -518,5 +519,36 @@ class SuitCardSequenceTypeTest implements CardSequenceListener {
 		removedCardsQueue.add(card);
 	}
 
+	@Nested
+	@DisplayName("the split method")
+	class SplitTest {
+			
+		Supplier<CardSequence> sequenceSupplier = () -> {
+			CardSequenceBuilder sequenceBuilder = newSequenceBuilder(listener)
+					.allowInstability(true);
+			CardSuit [] suits = CardSuit.values();
+			for (int i = 0; i < 4; i++) sequenceBuilder.addCard(new Card(CardRank.ACE, suits[i]));
+			return sequenceBuilder.build();
+		};
+		
+		@RepeatedTest(name = "the card #{currentRepetition}", value = 4)
+		@DisplayName("when trying to split")
+		void testMiddleCard(RepetitionInfo info) {
+			int n = info.getCurrentRepetition();
+			CardSequence sequence = sequenceSupplier.get();
+			assertFalse(sequence.split(n - 1),
+					() -> "should return false");
+			assertEquals(0, addedSequencesQueue.size(),
+					() -> "should not notify that a sequence has been added");
+			assertEquals(0, removedCardsQueue.size(),
+					() -> "should not notify that a card has been removed");
+			assertEquals(0, emptySequencesQueue.size(),
+					() -> "should not notify that a sequence is empty");
+			CardSequence expected = sequenceSupplier.get();
+			assertEquals(expected, sequence,
+					() -> "should not change the sequence whatsoever");
+		}
+		
+	}
 	
 }
