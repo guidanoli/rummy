@@ -2,10 +2,10 @@ package game.card.sequence;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import game.card.Card;
 import game.card.sequence.types.CardSequenceType;
-import game.card.sequence.types.CardSequenceTypeSupplier;
 
 /**
  * A card sequence builder is responsible for building 
@@ -18,7 +18,7 @@ import game.card.sequence.types.CardSequenceTypeSupplier;
  */
 public class CardSequenceBuilder {
 		
-	private CardSequenceTypeSupplier sequenceTypeSupplier;
+	private Supplier<CardSequenceType> sequenceTypeSupplier;
 	private Set<CardSequenceListener> listeners;
 	private Set<Card> cardSet;
 	private boolean allowInstability;
@@ -71,7 +71,7 @@ public class CardSequenceBuilder {
 	 * @see CardSequenceType
 	 * @see CardSequenceTypeSupplier
 	 */
-	public CardSequenceBuilder setType(CardSequenceTypeSupplier typeSupplier) {
+	public CardSequenceBuilder setType(Supplier<CardSequenceType> typeSupplier) {
 		this.sequenceTypeSupplier = typeSupplier;
 		return this;
 	}
@@ -94,7 +94,7 @@ public class CardSequenceBuilder {
 	 */
 	public CardSequence build() {
 		if( sequenceTypeSupplier == null ) throw new IllegalArgumentException("Undefined card sequence type");
-		CardSequenceType sequenceType = sequenceTypeSupplier.supply();
+		CardSequenceType sequenceType = sequenceTypeSupplier.get();
 		CardSequence cardSequence = new CardSequence(sequenceType);
 		if( !sequenceType.addCardSet(cardSet) || (!allowInstability && !cardSequence.isStable()) ) {
 			throw new IllegalArgumentException("Invalid card sequence");

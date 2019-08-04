@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.function.Consumer;
 
 import game.card.Card;
 import game.card.sequence.types.CardSequenceType;
@@ -173,9 +174,9 @@ public class CardSequence {
 	 * Fires all listeners with a calling message
 	 * @param caller - caller lambda
 	 */
-	private void callListeners(CardSequenceCaller caller) {
+	private void callListeners(Consumer<CardSequenceListener> caller) {
 		for( CardSequenceListener listener : listeners ) {
-			caller.call(listener);
+			caller.accept(listener);
 		}
 	}
 	

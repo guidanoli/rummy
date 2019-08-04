@@ -533,7 +533,7 @@ class SuitCardSequenceTest implements CardSequenceListener {
 		
 		@RepeatedTest(name = "the card #{currentRepetition}", value = 4)
 		@DisplayName("when trying to split")
-		void testMiddleCard(RepetitionInfo info) {
+		void testAnyCard(RepetitionInfo info) {
 			int n = info.getCurrentRepetition();
 			CardSequence sequence = sequenceSupplier.get();
 			assertFalse(sequence.split(n - 1),
