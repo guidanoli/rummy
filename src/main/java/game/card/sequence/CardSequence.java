@@ -179,6 +179,11 @@ public class CardSequence {
 		}
 	}
 	
+	/**
+	 * For debugging purposes, prints the cards of a sequence
+	 * in the same order as laid out by the iterator.
+	 * @return a textual representation of the sequence
+	 */
 	@Override
 	public String toString() {
 		StringJoiner cardStrings = new StringJoiner(", ");

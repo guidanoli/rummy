@@ -8,6 +8,8 @@ import java.util.Iterator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import game.card.Card;
@@ -716,6 +718,82 @@ class RankCardSequenceTest implements CardSequenceListener {
 					.build();
 			assertEquals(anotherExcepted, anotherSequence,
 					() -> "should output in the added sequences the sequence after the removed card");
+		}
+		
+	}
+	
+	@Nested
+	@DisplayName("the split method")
+	class SplitTest {
+		
+		@RepeatedTest(name = "in {currentRepetition}", value = 13)
+		@DisplayName("when trying to split from the first card")
+		void testFirstCard(RepetitionInfo info) {
+			int n = info.getCurrentRepetition();
+			CardSequenceBuilder sequenceBuilder = newSequenceBuilder(listener)
+					.allowInstability(true);
+			CardRank [] ranks = CardRank.values();
+			for (int i = 0; i < n; i++) sequenceBuilder.addCard(new Card(ranks[i], CardSuit.SPADES));
+			CardSequence sequence = sequenceBuilder.build();
+			assertFalse(sequence.split(0),
+					() -> "should return false");
+			assertEquals(0, addedSequencesQueue.size(),
+					() -> "should not notify that a sequence has been added");
+			assertEquals(0, removedCardsQueue.size(),
+					() -> "should not notify that a card has been removed");
+			assertEquals(0, emptySequencesQueue.size(),
+					() -> "should not notify that a sequence is empty");
+		}
+		
+		@RepeatedTest(name = "in {currentRepetition}", value = 13)
+		@DisplayName("when trying to split from the last card")
+		void testLastCard(RepetitionInfo info) {
+			int n = info.getCurrentRepetition();
+			CardSequenceBuilder sequenceBuilder = newSequenceBuilder(listener)
+					.allowInstability(true);
+			CardRank [] ranks = CardRank.values();
+			for (int i = 0; i < n; i++) sequenceBuilder.addCard(new Card(ranks[i], CardSuit.SPADES));
+			CardSequence sequence = sequenceBuilder.build();
+			assertFalse(sequence.split(n - 1),
+					() -> "should return false");
+			assertEquals(0, addedSequencesQueue.size(),
+					() -> "should not notify that a sequence has been added");
+			assertEquals(0, removedCardsQueue.size(),
+					() -> "should not notify that a card has been removed");
+			assertEquals(0, emptySequencesQueue.size(),
+					() -> "should not notify that a sequence is empty");
+		}
+		
+		@RepeatedTest(name = "the card #{currentRepetition}", value = 11)
+		@DisplayName("when trying to split")
+		void testMiddleCard(RepetitionInfo info) {
+			int n = info.getCurrentRepetition();
+			CardSequenceBuilder sequenceBuilder = newSequenceBuilder(listener)
+					.allowInstability(true);
+			CardRank [] ranks = CardRank.values();
+			for (int i = 0; i < 13; i++) sequenceBuilder.addCard(new Card(ranks[i], CardSuit.SPADES));
+			CardSequence sequence = sequenceBuilder.build();
+			assertTrue(sequence.split(n),
+					() -> "should return true");
+			assertEquals(1, addedSequencesQueue.size(),
+					() -> "should notify that a sequence has been added");
+			assertEquals(0, removedCardsQueue.size(),
+					() -> "should not notify that a card has been removed");
+			assertEquals(0, emptySequencesQueue.size(),
+					() -> "should not notify that a sequence is empty");
+			CardSequence splitUpSequence = addedSequencesQueue.remove(0);
+			CardSequenceBuilder expectedLeftBuilder = newSequenceBuilder(listener)
+					.allowInstability(true);
+			for (int i = 0; i < n; i++) expectedLeftBuilder.addCard(new Card(ranks[i], CardSuit.SPADES));
+			CardSequence expectedLeft = expectedLeftBuilder.build();
+			assertEquals(expectedLeft, sequence,
+					() -> "should remove all the cards after the index from the original sequence");
+			CardSequenceBuilder expectedRightBuilder = newSequenceBuilder(listener)
+					.allowInstability(true);
+			for (int i = n; i < 13; i++) expectedRightBuilder.addCard(new Card(ranks[i], CardSuit.SPADES));
+			CardSequence expectedRight = expectedRightBuilder.build();
+			assertEquals(expectedRight, splitUpSequence,
+					() -> "should output a sequence with all cards after the index of the original sequence");
 		}
 		
 	}
