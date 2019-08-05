@@ -24,6 +24,7 @@ import game.sequence.CardSequenceListener;
  * <p>Or even clear the whole table with the {@link #clearTable()} method.
  * 
  * @author guidanoli
+ * @see CardSequence
  *
  */
 public class CardSequenceTable implements Iterable<CardSequence> {
@@ -80,8 +81,8 @@ public class CardSequenceTable implements Iterable<CardSequence> {
 	 * or {@code false} if else.
 	 */
 	public boolean addSequence(CardSequence sequence) {
-		boolean stable = sequence.isStable();
-		if (!stable) return false; // cannot add an unstable card sequence
+		if (!sequence.isStable()) return false; // no unstable card sequences
+		for(CardSequence seq : this) if(seq == sequence) return false; // no duplicates
 		sequence.addListener(thisListener);
 		cardSequenceList.add(sequence);
 		return true;

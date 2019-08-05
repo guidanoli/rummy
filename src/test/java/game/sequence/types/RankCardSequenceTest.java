@@ -20,7 +20,7 @@ import game.sequence.CardSequenceBuilder;
 import game.sequence.CardSequenceListener;
 import game.sequence.types.RankCardSequenceType;
 
-@DisplayName("On the RankCardSequence class")
+@DisplayName("On the RankCardSequenceType class")
 class RankCardSequenceTest implements CardSequenceListener {
 	
 	private CardSequenceListener listener;

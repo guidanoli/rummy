@@ -21,7 +21,7 @@ import game.sequence.CardSequenceBuilder;
 import game.sequence.CardSequenceListener;
 import game.sequence.types.SuitCardSequenceType;
 
-@DisplayName("On the SuitCardSequence class")
+@DisplayName("On the SuitCardSequenceType class")
 class SuitCardSequenceTest implements CardSequenceListener {
 
 	private CardSequenceListener listener;
@@ -500,26 +500,6 @@ class SuitCardSequenceTest implements CardSequenceListener {
 		
 	}
 	
-	/* Listener methods */
-	
-	public void cardSequenceAdded(CardSequence cardSequence) {
-		assertNotNull(cardSequence,
-				() -> "Card sequence added should not be null");
-		addedSequencesQueue.add(cardSequence);
-	}
-
-	public void cardSequenceIsEmpty(CardSequence cardSequence) {
-		assertNotNull(cardSequence,
-				() -> "Card sequence removed should not be null");
-		emptySequencesQueue.add(cardSequence);
-	}
-
-	public void cardRemovedFromSequence(Card card) {
-		assertNotNull(card,
-				() -> "Card removed should not be null");
-		removedCardsQueue.add(card);
-	}
-
 	@Nested
 	@DisplayName("the split method")
 	class SplitTest {
@@ -550,6 +530,26 @@ class SuitCardSequenceTest implements CardSequenceListener {
 					() -> "should not change the sequence whatsoever");
 		}
 		
+	}
+
+	/* Listener methods */
+	
+	public void cardSequenceAdded(CardSequence cardSequence) {
+		assertNotNull(cardSequence,
+				() -> "Card sequence added should not be null");
+		addedSequencesQueue.add(cardSequence);
+	}
+
+	public void cardSequenceIsEmpty(CardSequence cardSequence) {
+		assertNotNull(cardSequence,
+				() -> "Card sequence removed should not be null");
+		emptySequencesQueue.add(cardSequence);
+	}
+
+	public void cardRemovedFromSequence(Card card) {
+		assertNotNull(card,
+				() -> "Card removed should not be null");
+		removedCardsQueue.add(card);
 	}
 	
 }

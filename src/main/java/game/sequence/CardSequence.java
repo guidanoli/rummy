@@ -12,7 +12,7 @@ import game.sequence.types.CardSequenceType;
 /**
  * 
  * <p>A card sequence is any collection of cards with a predetermined
- * set of rules that validate its state/stability. Cards can be added
+ * set of rules that validate its stability. Cards can be added
  * or removed from the sequence whenever possible.
  * 
  * <p>The criteria that determines whether two cards are sequential
@@ -26,11 +26,15 @@ import game.sequence.types.CardSequenceType;
  * occur. It's important to have listeners in order to handle new sequences
  * being created by splitting and empty sequences by removing.
  * 
+ * <p>A card sequence can be iterated through by the {@code for} notation
+ * since this class implements the {@link Iterable} interface.
+ * 
  * @author guidanoli
  * @see Card
+ * @see CardSequenceListener
  *
  */
-public class CardSequence {
+public class CardSequence implements Iterable<Card> {
 	
 	private Set<CardSequenceListener> listeners = new HashSet<CardSequenceListener>();
 	private CardSequenceType type;
@@ -150,7 +154,10 @@ public class CardSequence {
 	}
 		
 	/**
-	 * @return sequence iterator
+	 * @return iterator that iterates through all of the card
+	 * in the sequence, which can also be done by the
+	 * {@code for} notation:
+	 * <p>{@code for(Card card: cardSequence) {...}}
 	 */
 	public Iterator<Card> iterator() {
 		return type.getSequenceIterator();
