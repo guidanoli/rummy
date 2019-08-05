@@ -46,6 +46,8 @@ class CardSequenceTableTest implements CardSequenceTableListener {
 			CardSequence sequence = builder.build();
 			assertFalse(table.addSequence(sequence),
 					() -> "should return false");
+			assertEquals(0, table.size(),
+					() -> "should leave the table empty");
 			assertEquals(0, removedCardsQueue.size(),
 					() -> "should not notify that a card has been removed");
 		}
@@ -60,6 +62,8 @@ class CardSequenceTableTest implements CardSequenceTableListener {
 			CardSequence sequence = builder.build();
 			assertTrue(table.addSequence(sequence),
 					() -> "should return true");
+			assertEquals(1, table.size(),
+					() -> "should make the table have one sequence");
 			assertEquals(0, removedCardsQueue.size(),
 					() -> "should not notify that a card has been removed");
 		}
@@ -100,6 +104,8 @@ class CardSequenceTableTest implements CardSequenceTableListener {
 					() -> "should return true the first time");
 			assertFalse(table.addSequence(sequence),
 					() -> "should return false the second time");
+			assertEquals(1, table.size(),
+					() -> "should make the table have one sequence only");
 		}
 		
 		@Test
@@ -115,6 +121,8 @@ class CardSequenceTableTest implements CardSequenceTableListener {
 					() -> "should return true the first time");
 			assertTrue(table.addSequence(secondSequence),
 					() -> "should return true the second time");
+			assertEquals(2, table.size(),
+					() -> "should make the table have two sequences");
 		}
 		
 	}

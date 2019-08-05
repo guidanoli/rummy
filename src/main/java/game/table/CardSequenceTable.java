@@ -109,6 +109,13 @@ public class CardSequenceTable implements Iterable<CardSequence> {
 	}
 	
 	/**
+	 * @return number of card sequences
+	 */
+	public int size() {
+		return cardSequenceList.size();
+	}
+	
+	/**
 	 * @return iterator that iterates through all of the card
 	 * sequences in the table, which can also be done by the
 	 * {@code for} notation:
