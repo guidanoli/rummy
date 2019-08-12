@@ -138,6 +138,19 @@ public class CardSequenceTable implements Iterable<CardSequence> {
 	}
 	
 	/**
+	 * Checks whether there is an unstable card sequence on the table.
+	 * @return {@code true} if there isn't, or {@code false} if there is.
+	 */
+	public boolean isStable() {
+		for (CardSequence sequence : this) {
+			if (!sequence.isStable()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
 	 * @return iterator that iterates through all of the card
 	 * sequences in the table, which can also be done by the
 	 * {@code for} notation:

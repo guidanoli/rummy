@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.function.Supplier;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -392,11 +393,13 @@ class CardSequenceTableTest implements CardSequenceTableListener {
 						() -> "should result in expected sequences");
 				expectedSequences.remove(cs);
 			}
+			assertTrue(table.isStable(),
+					() -> "should leave the table in a stable state");
 		}
 		
 		@Test
 		@DisplayName("when generating an unstable sequence through splitting")
-		void testSplittingUntableSequences() {
+		void testSplittingUnstableSequences() {
 			CardSequence sequence = new CardSequenceBuilder()
 					.setType(() -> new RankCardSequenceType())
 					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
@@ -413,7 +416,7 @@ class CardSequenceTableTest implements CardSequenceTableListener {
 					() -> "should allow the splitting");
 			assertEquals(2, table.size(),
 					() -> "the table should have two sequence after splitting");
-			ArrayList<CardSequence> expectedSequences = new ArrayList<CardSequence>();
+			LinkedList<CardSequence> expectedSequences = new LinkedList<CardSequence>();
 			expectedSequences.add(new CardSequenceBuilder()
 					.setType(() -> new RankCardSequenceType())
 					.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
@@ -431,6 +434,8 @@ class CardSequenceTableTest implements CardSequenceTableListener {
 						() -> "should result in expected sequences");
 				expectedSequences.remove(cs);
 			}
+			assertFalse(table.isStable(),
+					() -> "should leave the table in an unstable state");
 		}
 		
 	}
