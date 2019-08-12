@@ -87,21 +87,6 @@ public class CardSequence implements Iterable<Card> {
 		}
 		return removed;
 	}
-		
-	/**
-	 * @return set of all cards of the sequence that can be removed
-	 */
-	public Set<Card> getRemovableCards() {
-		Set<Card> removableCards = new HashSet<Card>();
-		Iterator<Card> iterator = type.getSequenceIterator();
-		while( iterator.hasNext() ) {
-			Card card = iterator.next();
-			if ( type.canRemove(card) ) {
-				removableCards.add(card);
-			}
-		}
-		return removableCards;
-	}
 	
 	/**
 	 * Splits sequence into two
