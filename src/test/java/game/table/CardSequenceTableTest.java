@@ -440,6 +440,115 @@ class CardSequenceTableTest implements CardSequenceTableListener {
 		
 	}
 	
+	@Nested
+	@DisplayName("the isStable method")
+	class StableTest {
+		
+		private Supplier<CardSequence> sequenceSupplier = () -> new CardSequenceBuilder()
+				.setType(() -> new RankCardSequenceType())
+				.addCard(new Card(CardRank.ACE, CardSuit.SPADES))
+				.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
+				.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
+				.build();
+		
+		@Test
+		@DisplayName("on an empty table")
+		void testEmpty() {
+			assertTrue(table.isStable(),
+					() -> "should return true");
+		}
+		
+		@Test
+		@DisplayName("on a table with one sequence")
+		void testOneSequence() {
+			CardSequence sequence = sequenceSupplier.get();
+			table.addSequence(sequence);
+			assertTrue(table.isStable(),
+					() -> "should return true");
+		}
+		
+		@Test
+		@DisplayName("on a table with one sequence with 2 cards (unstable)")
+		void testOneSequenceAfterRemoval() {
+			CardSequence sequence = sequenceSupplier.get();
+			table.addSequence(sequence);
+			for (CardSequence cs : table) sequence = cs;
+			sequence.removeCard(new Card(CardRank.ACE, CardSuit.SPADES));
+			assertFalse(table.isStable(),
+					() -> "should return false");
+		}
+		
+		@Test
+		@DisplayName("on a table with one sequence with 3 cards (after removal and addition)")
+		void testOneSequenceAfterRemovalAndAddition() {
+			CardSequence sequence = sequenceSupplier.get();
+			table.addSequence(sequence);
+			for (CardSequence cs : table) sequence = cs;
+			final Card card = new Card(CardRank.ACE, CardSuit.SPADES);
+			sequence.removeCard(card);
+			sequence.addCard(card);
+			assertTrue(table.isStable(),
+					() -> "should return true");
+		}
+		
+		@Test
+		@DisplayName("on a table with a sequence made unstable and then removed")
+		void testUnstableSequenceRemoved() {
+			CardSequence sequence = sequenceSupplier.get();
+			table.addSequence(sequence);
+			for (CardSequence cs : table) sequence = cs;
+			sequence.removeCard(new Card(CardRank.ACE, CardSuit.SPADES));
+			table.removeSequence(sequence);
+			assertTrue(table.isStable(),
+					() -> "should return true");
+		}
+		
+		@Test
+		@DisplayName("on a table with a sequence whose cards are being removed one by one")
+		void testUnstableSequenceRemovedOneByOne() {
+			CardSequence sequence = sequenceSupplier.get();
+			table.addSequence(sequence);
+			for (CardSequence cs : table) sequence = cs;
+			CardRank [] ranks = CardRank.values();
+			CardSuit suit = CardSuit.SPADES;
+			for (int i = 0; i < 3; i++) sequence.removeCard(new Card(ranks[i], suit)); 
+			assertTrue(table.isStable(),
+					() -> "should return true");
+		}
+		
+		@Test
+		@DisplayName("on a table with two unstable sequences")
+		void testTwoUnstableSequences() {
+			for (int i = 0; i < 2; i++) table.addSequence(sequenceSupplier.get());
+			for (CardSequence cs : table) cs.removeCard(new Card(CardRank.ACE, CardSuit.SPADES));
+			assertFalse(table.isStable(),
+					() -> "should return false");
+		}
+		
+		@Test
+		@DisplayName("on a table with 50/50 stable/unstable sequences")
+		void testMixed() {
+			for (int i = 0; i < 4; i++) table.addSequence(sequenceSupplier.get());
+			int aux = 0;
+			for (CardSequence cs : table) {
+				if (aux % 2 == 0) cs.removeCard(new Card(CardRank.ACE, CardSuit.SPADES));
+				aux++;
+			}
+			assertFalse(table.isStable(),
+					() -> "should return false");
+			Supplier<CardSequence> unstableSequenceSupplier = () -> new CardSequenceBuilder()
+					.setType(() -> new RankCardSequenceType())
+					.allowInstability(true)
+					.addCard(new Card(CardRank.TWO, CardSuit.SPADES))
+					.addCard(new Card(CardRank.THREE, CardSuit.SPADES))
+					.build();
+			for (int i = 0; i < 2; i++) table.removeSequence(unstableSequenceSupplier.get());
+			assertTrue(table.isStable(),
+					() -> "should return true after removing the unstable ones");
+		}
+		
+	}
+	
 	@Override
 	public void cardRemoved(Card card) {
 		assertNotNull(card,
