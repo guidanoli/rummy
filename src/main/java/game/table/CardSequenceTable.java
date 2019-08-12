@@ -13,18 +13,20 @@ import game.sequence.CardSequenceListener;
  * It handles new card sequences being created or being removed (when empty)
  * through the {@link CardSequenceListener} interface.
  * 
- * <p>One can access the card sequence by simply iterating through them as
- * any iterators:
+ * <p>One can access the card sequence by simply iterating through them:
  * <p>{@code for(CardSequence sequence : cardSequenceTable) { ... }}
  * 
  * <p>Also, one can add or remove card sequences through the
  * {@link #addSequence(CardSequence)} and {@link #removeSequence(CardSequence)}
- * methods.
+ * methods, or even clear the whole table with the {@link #clearTable()} method.
  * 
- * <p>Or even clear the whole table with the {@link #clearTable()} method.
+ * <p>Some events aren't handled by the card sequence table itself and are
+ * delegated to an observer that implements the {@link CardSequenceTableListener}
+ * interface. 
  * 
  * @author guidanoli
  * @see CardSequence
+ * @see CardSequenceTableListener
  *
  */
 public class CardSequenceTable implements Iterable<CardSequence> {
@@ -54,7 +56,7 @@ public class CardSequenceTable implements Iterable<CardSequence> {
 		
 		public void cardSequenceAdded(CardSequence cardSequence) {
 			// if a new card sequence is created, it must be added
-			CardSequenceTable.this.addSequence(cardSequence);
+			CardSequenceTable.this.addSequence(cardSequence, true);
 		}
 		
 		public void cardRemovedFromSequence(Card card) {
@@ -81,7 +83,19 @@ public class CardSequenceTable implements Iterable<CardSequence> {
 	 * or {@code false} if else.
 	 */
 	public boolean addSequence(CardSequence sequence) {
-		if (!sequence.isStable()) return false; // no unstable card sequences
+		return addSequence(sequence, false);
+	}
+	
+	/**
+	 * Adds a sequence to the table.
+	 * @param sequence - card sequence to be added
+	 * @param allowUnstability - {@code true} allows the card
+	 * sequence to be unstable, and {@code false} does not.
+	 * @return {@code true} if card could be added, or
+	 * {@code false} if else.
+	 */
+	private boolean addSequence(CardSequence sequence, boolean allowUnstability) {
+		if (!allowUnstability && !sequence.isStable()) return false;
 		for(CardSequence seq : this) if(seq == sequence) return false; // no duplicates
 		sequence.addListener(thisListener);
 		cardSequenceList.add(sequence);
@@ -113,6 +127,14 @@ public class CardSequenceTable implements Iterable<CardSequence> {
 	 */
 	public int size() {
 		return cardSequenceList.size();
+	}
+	
+	/**
+	 * @return {@code true} if no card sequences are on table,
+	 * or {@code false} if else.
+	 */
+	public boolean isEmpty() {
+		return cardSequenceList.isEmpty();
 	}
 	
 	/**
