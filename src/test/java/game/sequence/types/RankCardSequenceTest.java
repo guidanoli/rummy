@@ -798,6 +798,40 @@ class RankCardSequenceTest implements CardSequenceListener {
 		
 	}
 	
+	@Nested
+	@DisplayName("the toString method")
+	class ToStringTest {
+		
+		@Test
+		@DisplayName("on an empty sequence")
+		void testEmpty() {
+			CardSequence sequence = newSequenceBuilder(listener)
+					.allowInstability(true)
+					.build();
+			final String expected = "[]";
+			assertEquals(expected, sequence.toString(),
+					() -> "should return "+expected);
+		}
+		
+		@RepeatedTest(name = "(with {currentRepetition} cards)", value = 13)
+		@DisplayName("on a sequence with cards")
+		void testNotEmpty(RepetitionInfo info) {
+			int n = info.getCurrentRepetition();
+			CardSequenceBuilder builder = newSequenceBuilder(listener)
+					.allowInstability(true);
+			CardRank [] ranks = CardRank.values();
+			CardSuit suit = CardSuit.SPADES;
+			for (int i = 0; i < n; i++) builder.addCard(new Card(ranks[i], suit));
+			CardSequence sequence = builder.build();
+			String actual = sequence.toString();
+			for (Card card : sequence) {
+				assertTrue(actual.contains(card.toString()),
+						() -> "should output a string with all of the cards' names");
+			}
+		}
+				
+	}
+	
 	/* Listener methods */
 	
 	public void cardSequenceAdded(CardSequence cardSequence) {
