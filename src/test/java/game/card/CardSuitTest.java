@@ -22,7 +22,7 @@ class CardSuitTest {
 		void testCardSuitsNames() {
 			String [] expectedNames = {"Hearts", "Spades", "Diamonds", "Clubs"};
 			String [] actualNames = new String[cardSuits.length];
-			for( int i = 0 ; i < cardSuits.length; i++ ) actualNames[i] = cardSuits[i].toString();
+			for ( int i = 0 ; i < cardSuits.length; i++ ) actualNames[i] = cardSuits[i].toString();
 			assertArrayEquals(expectedNames, actualNames,
 					() -> "should return its proper name");
 		}
@@ -30,8 +30,8 @@ class CardSuitTest {
 		@Test
 		@DisplayName("for any two different card suits")
 		void testCardRanksNamesAreUnique() {
-			for( int i = 0 ; i < cardSuits.length; i++ ) {
-				for( int j = i + 1 ; j < cardSuits.length; j++ ) {
+			for ( int i = 0 ; i < cardSuits.length; i++ ) {
+				for ( int j = i + 1 ; j < cardSuits.length; j++ ) {
 					assertNotEquals(cardSuits[j].toString(), cardSuits[i].toString(),
 							() -> "should output different strings");
 				}
@@ -47,8 +47,8 @@ class CardSuitTest {
 		@Test
 		@DisplayName("for any two different card suits")
 		void testCardSuitIndexesAreUnique() {
-			for( int i = 0 ; i < cardSuits.length; i++ ) {
-				for( int j = i + 1 ; j < cardSuits.length; j++ ) {
+			for ( int i = 0 ; i < cardSuits.length; i++ ) {
+				for ( int j = i + 1 ; j < cardSuits.length; j++ ) {
 					assertNotEquals(cardSuits[j].getIndex(), cardSuits[i].getIndex(),
 							() -> "should output different suit identifiers");
 				}
@@ -64,7 +64,7 @@ class CardSuitTest {
 		@Test
 		@DisplayName("for the same card suit")
 		void testEqualsItself() {
-			for( CardSuit cardSuit : cardSuits ) {
+			for ( CardSuit cardSuit : cardSuits ) {
 				assertTrue(cardSuit.equals(cardSuit),
 						() -> "should return true");
 			}
@@ -73,7 +73,7 @@ class CardSuitTest {
 		@Test
 		@DisplayName("for any two different card suits")
 		void testEqualsAnother() {
-			for( int i = 0 ; i < cardSuits.length - 1; i++ ) {
+			for ( int i = 0 ; i < cardSuits.length - 1; i++ ) {
 				assertFalse(cardSuits[i].equals(cardSuits[i+1]),
 						() -> "should return false");
 			}

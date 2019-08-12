@@ -287,12 +287,12 @@ class RankCardSequenceTest implements CardSequenceListener {
 					new Card(CardRank.ACE, CardSuit.SPADES)
 			};
 			CardSequence sequence = builder.allowInstability(true).build();
-			for(int i = 0; i < cards.length; i++) {
+			for (int i = 0; i < cards.length; i++) {
 				assertTrue(sequence.addCard(cards[i]),
 						() -> "adds successfully to the sequence");
 			}
 			Iterator<Card> iterator = sequence.iterator();
-			for(int i = 0; i < cards.length; i++) {
+			for (int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add one card exactly");
 				assertEquals(cards[i], iterator.next(),
@@ -310,12 +310,12 @@ class RankCardSequenceTest implements CardSequenceListener {
 					new Card(CardRank.TWO, CardSuit.SPADES)
 			};
 			CardSequence sequence = builder.allowInstability(true).build();
-			for(int i = 0; i < cards.length; i++) {
+			for (int i = 0; i < cards.length; i++) {
 				assertTrue(sequence.addCard(cards[i]),
 						() -> "adds successfully to the sequence");
 			}
 			Iterator<Card> iterator = sequence.iterator();
-			for(int i = 0; i < cards.length; i++) {
+			for (int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add two cards exactly");
 				assertEquals(cards[i], iterator.next(),
@@ -331,12 +331,12 @@ class RankCardSequenceTest implements CardSequenceListener {
 					new Card(CardRank.ACE, CardSuit.SPADES)
 			};
 			CardSequence sequence = builder.allowInstability(true).build();
-			for(int i = 0; i < cards.length; i++) {
+			for (int i = 0; i < cards.length; i++) {
 				assertTrue(sequence.addCard(cards[i]),
 						() -> "adds successfully to the sequence");
 			}
 			Iterator<Card> iterator = sequence.iterator();
-			for(int i = cards.length - 1; i >= 0; i--) {
+			for (int i = cards.length - 1; i >= 0; i--) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add two cards exactly");
 				assertEquals(cards[i], iterator.next(),
@@ -353,12 +353,12 @@ class RankCardSequenceTest implements CardSequenceListener {
 					new Card(CardRank.THREE, CardSuit.SPADES)
 			};
 			CardSequence sequence = builder.allowInstability(true).build();
-			for(int i = 0; i < cards.length; i++) {
+			for (int i = 0; i < cards.length; i++) {
 				assertTrue(sequence.addCard(cards[i]),
 						() -> "adds successfully to the sequence");
 			}
 			Iterator<Card> iterator = sequence.iterator();
-			for(int i = 0; i < cards.length; i++) {
+			for (int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add three cards exactly");
 				assertEquals(cards[i], iterator.next(),
@@ -375,12 +375,12 @@ class RankCardSequenceTest implements CardSequenceListener {
 					new Card(CardRank.THREE, CardSuit.SPADES)
 			};
 			CardSequence sequence = builder.allowInstability(true).build();
-			for(int i = cards.length - 1; i >= 0 ; i--) {
+			for (int i = cards.length - 1; i >= 0 ; i--) {
 				assertTrue(sequence.addCard(cards[i]),
 						() -> "adds successfully to the sequence");
 			}
 			Iterator<Card> iterator = sequence.iterator();
-			for(int i = 0; i < cards.length; i++) {
+			for (int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add three cards exactly");
 				assertEquals(cards[i], iterator.next(),
@@ -448,12 +448,12 @@ class RankCardSequenceTest implements CardSequenceListener {
 			};
 			int [] order = {4,3,5,2,6,1,7,0,8};
 			CardSequence sequence = builder.allowInstability(true).build();
-			for(int i = 0; i < cards.length; i++) {
+			for (int i = 0; i < cards.length; i++) {
 				assertTrue(sequence.addCard(cards[order[i]]),
 						() -> "adds cards successfully to the sequence");
 			}
 			Iterator<Card> iterator = sequence.iterator();
-			for(int i = 0; i < cards.length; i++) {
+			for (int i = 0; i < cards.length; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add all five cards exactly");
 				assertEquals(cards[i], iterator.next(),
@@ -476,7 +476,7 @@ class RankCardSequenceTest implements CardSequenceListener {
 					new Card(CardRank.SEVEN, CardSuit.SPADES)
 			};
 			CardSequence sequence = builder.allowInstability(true).build();
-			for(int i = 0; i < cards.length; i++) sequence.addCard(cards[i]);
+			for (int i = 0; i < cards.length; i++) sequence.addCard(cards[i]);
 			assertEquals(cards.length, sequence.size(),
 					() -> "should add all cards");
 			assertEquals(0, addedSequencesQueue.size(),

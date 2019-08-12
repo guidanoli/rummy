@@ -63,9 +63,9 @@ public class CardSequence implements Iterable<Card> {
 	 */
 	public boolean addCard(Card card) {
 		boolean added = false;
-		if( added = type.canAdd(card) ) {
+		if ( added = type.canAdd(card) ) {
 			CardSequenceBuilder builder = type.add(card);
-			if( builder != null ) buildNewSequence(builder);
+			if ( builder != null ) buildNewSequence(builder);
 			
 		}
 		return added;
@@ -79,11 +79,11 @@ public class CardSequence implements Iterable<Card> {
 	 */
 	public boolean removeCard(Card card) {
 		boolean removed = false;
-		if( removed = type.canRemove(card) ) {
+		if ( removed = type.canRemove(card) ) {
 			CardSequenceBuilder builder = type.remove(card);
-			if( builder != null ) buildNewSequence(builder);
+			if ( builder != null ) buildNewSequence(builder);
 			callListeners((listener) -> listener.cardRemovedFromSequence(card));
-			if( size() == 0 ) callListeners((listener) -> listener.cardSequenceIsEmpty(this));
+			if ( size() == 0 ) callListeners((listener) -> listener.cardSequenceIsEmpty(this));
 		}
 		return removed;
 	}
@@ -96,7 +96,7 @@ public class CardSequence implements Iterable<Card> {
 		Iterator<Card> iterator = type.getSequenceIterator();
 		while( iterator.hasNext() ) {
 			Card card = iterator.next();
-			if( type.canRemove(card) ) {
+			if ( type.canRemove(card) ) {
 				removableCards.add(card);
 			}
 		}
@@ -110,9 +110,9 @@ public class CardSequence implements Iterable<Card> {
 	 * {@code false} if sequence could not be split up
 	 */
 	public boolean split(int index) {
-		if( !type.canSplit(index) ) return false;
+		if ( !type.canSplit(index) ) return false;
 		CardSequenceBuilder builder = type.split(index); 
-		if( builder != null ) buildNewSequence(builder);
+		if ( builder != null ) buildNewSequence(builder);
 		return true;
 	}
 	
@@ -123,12 +123,12 @@ public class CardSequence implements Iterable<Card> {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if( o instanceof CardSequence ) {
+		if ( o instanceof CardSequence ) {
 			CardSequence anotherCardSequence = (CardSequence) o;
 			Iterator<Card> iterator = type.getSequenceIterator();
 			Iterator<Card> anotherIterator = anotherCardSequence.type.getSequenceIterator();
 			while( iterator.hasNext() ) {
-				if( !anotherIterator.hasNext() ||
+				if ( !anotherIterator.hasNext() ||
 					!anotherIterator.next().equals(iterator.next()) ) {
 					return false;
 				}
@@ -157,7 +157,7 @@ public class CardSequence implements Iterable<Card> {
 	 * @return iterator that iterates through all of the card
 	 * in the sequence, which can also be done by the
 	 * {@code for} notation:
-	 * <p>{@code for(Card card: cardSequence) {...}}
+	 * <p>{@code for (Card card: cardSequence) {...}}
 	 */
 	public Iterator<Card> iterator() {
 		return type.getSequenceIterator();
@@ -182,7 +182,7 @@ public class CardSequence implements Iterable<Card> {
 	 * @param caller - caller lambda
 	 */
 	private void callListeners(Consumer<CardSequenceListener> caller) {
-		for( CardSequenceListener listener : listeners ) {
+		for ( CardSequenceListener listener : listeners ) {
 			caller.accept(listener);
 		}
 	}

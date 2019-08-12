@@ -34,9 +34,9 @@ public class FatalError {
 		public Builder exit(boolean exit) { this.exit = exit; return this; }	
 		
 		public void show() {
-			if( exception != null ) { // exception
+			if ( exception != null ) { // exception
 				FatalError.show(exception, parent, exit);
-			} else if( message != null ) { // or message
+			} else if ( message != null ) { // or message
 				FatalError.show(message, parent, exit);
 			} // or nothing
 		}
@@ -53,7 +53,7 @@ public class FatalError {
 	 */
 	public static void show (String msg, Component parent, boolean exit) {
 		JOptionPane.showMessageDialog(parent, msg, ERROR_MSG_TITLE, JOptionPane.ERROR_MESSAGE);
-		if( exit ) System.exit(0);
+		if ( exit ) System.exit(0);
 	}
 	
 	/**
@@ -71,7 +71,7 @@ public class FatalError {
 		sp.setViewportView(txt);
 		sp.setPreferredSize(new Dimension(1000,200));
 		JOptionPane.showMessageDialog(parent, sp, ERROR_LOG_TITLE, JOptionPane.ERROR_MESSAGE);
-		if( exit ) System.exit(0);
+		if ( exit ) System.exit(0);
 	}
 	
 	/**
@@ -91,16 +91,16 @@ public class FatalError {
 	    String data = new String(baos.toByteArray(), StandardCharsets.UTF_8);
 	    String [] options = {"OK","Show log"};
 	    String msg = e.getMessage();
-	    if( msg == null ) msg = ERROR_GENERAL_MSG;
+	    if ( msg == null ) msg = ERROR_GENERAL_MSG;
 	    int choice = JOptionPane.showOptionDialog(	parent,
 				    								msg,
 			    									ERROR_MSG_TITLE,
 			    									JOptionPane.OK_CANCEL_OPTION,
 			    									JOptionPane.ERROR_MESSAGE,
 			    									null, options, options[0]);
-	    if( choice == 1 )
+	    if ( choice == 1 )
 	    	showLog(data,parent,false);
-	    if( exit ) System.exit(0);
+	    if ( exit ) System.exit(0);
 	}
 		
 	

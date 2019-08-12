@@ -23,7 +23,7 @@ class CardRankTest {
 			String [] expectedNames = {"Ace", "Two", "Three", "Four", "Five", "Six",
 					"Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"};
 			String [] actualNames = new String[cardRanks.length];
-			for( int i = 0 ; i < cardRanks.length; i++ ) actualNames[i] = cardRanks[i].toString();
+			for ( int i = 0 ; i < cardRanks.length; i++ ) actualNames[i] = cardRanks[i].toString();
 			assertArrayEquals(expectedNames, actualNames,
 					() -> "should return its proper name");
 		}
@@ -31,8 +31,8 @@ class CardRankTest {
 		@Test
 		@DisplayName("for any two different card ranks")
 		void testCardRanksNamesAreUnique() {
-			for( int i = 0 ; i < cardRanks.length; i++ ) {
-				for( int j = i + 1 ; j < cardRanks.length; j++ ) {
+			for ( int i = 0 ; i < cardRanks.length; i++ ) {
+				for ( int j = i + 1 ; j < cardRanks.length; j++ ) {
 					assertNotEquals(cardRanks[j].toString(), cardRanks[i].toString(),
 							() -> "should output different strings");
 				}
@@ -48,8 +48,8 @@ class CardRankTest {
 		@Test
 		@DisplayName("for any two different card ranks")
 		void testCardRankIndexesAreUnique() {
-			for( int i = 0 ; i < cardRanks.length; i++ ) {
-				for( int j = i + 1 ; j < cardRanks.length; j++ ) {
+			for ( int i = 0 ; i < cardRanks.length; i++ ) {
+				for ( int j = i + 1 ; j < cardRanks.length; j++ ) {
 					assertNotEquals(cardRanks[j].getIndex(), cardRanks[i].getIndex(),
 							() -> "should output different rank identifiers");
 				}
@@ -65,7 +65,7 @@ class CardRankTest {
 		@Test
 		@DisplayName("for the same card rank")
 		void testEqualsItself() {
-			for( CardRank cardRank : cardRanks ) {
+			for ( CardRank cardRank : cardRanks ) {
 				assertTrue(cardRank.equals(cardRank),
 						() -> "should return true");
 			}
@@ -74,7 +74,7 @@ class CardRankTest {
 		@Test
 		@DisplayName("for any two different card ranks")
 		void testEqualsAnother() {
-			for( int i = 0 ; i < cardRanks.length - 1; i++ ) {
+			for ( int i = 0 ; i < cardRanks.length - 1; i++ ) {
 				assertFalse(cardRanks[i].equals(cardRanks[i+1]),
 						() -> "should return false");
 			}
@@ -89,7 +89,7 @@ class CardRankTest {
 		@Test
 		@DisplayName("for the same card rank")
 		void testIsItsOwnNeighbour() {
-			for( CardRank cardRank : cardRanks ) {
+			for ( CardRank cardRank : cardRanks ) {
 				assertFalse(cardRank.isNeighbour(cardRank),
 						() -> "should return false");
 			}
@@ -98,7 +98,7 @@ class CardRankTest {
 		@Test
 		@DisplayName("for any two adjacent card ranks")
 		void testIsAnothersNeighbour() {
-			for( int i = 0 ; i < cardRanks.length - 1; i++ ) {
+			for ( int i = 0 ; i < cardRanks.length - 1; i++ ) {
 				assertTrue(cardRanks[i].isNeighbour(cardRanks[i+1]),
 						() -> "should return true");
 			}
@@ -114,8 +114,8 @@ class CardRankTest {
 		@Test
 		@DisplayName("for any two card ranks")
 		void testIsBidirectional() {
-			for( int i = 0 ; i < cardRanks.length; i++ ) {
-				for( int j = 0 ; j < cardRanks.length; j++ ) {
+			for ( int i = 0 ; i < cardRanks.length; i++ ) {
+				for ( int j = 0 ; j < cardRanks.length; j++ ) {
 					assertEquals( cardRanks[i].isNeighbour(cardRanks[j]),
 							cardRanks[j].isNeighbour(cardRanks[i]),
 							() -> "should have the same return value both ways"
@@ -133,8 +133,8 @@ class CardRankTest {
 		@Test
 		@DisplayName("for any two card ranks")
 		void testCompare() {
-			for( int i = 0 ; i < cardRanks.length; i++ ) {
-				for( int j = 0 ; j < cardRanks.length; j++ ) {
+			for ( int i = 0 ; i < cardRanks.length; i++ ) {
+				for ( int j = 0 ; j < cardRanks.length; j++ ) {
 					assertEquals( cardRanks[i].compare(cardRanks[j]), i - j,
 							() -> "should return the difference between them");
 				}

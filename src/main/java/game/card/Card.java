@@ -110,7 +110,7 @@ public class Card {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if( o instanceof Card ) {
+		if ( o instanceof Card ) {
 			Card card = (Card) o;
 			return equalRanks(card) && equalSuits(card);
 		}

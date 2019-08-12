@@ -14,7 +14,7 @@ import game.sequence.CardSequenceListener;
  * through the {@link CardSequenceListener} interface.
  * 
  * <p>One can access the card sequence by simply iterating through them:
- * <p>{@code for(CardSequence sequence : cardSequenceTable) { ... }}
+ * <p>{@code for (CardSequence sequence : cardSequenceTable) { ... }}
  * 
  * <p>Also, one can add or remove card sequences through the
  * {@link #addSequence(CardSequence)} and {@link #removeSequence(CardSequence)}
@@ -96,7 +96,7 @@ public class CardSequenceTable implements Iterable<CardSequence> {
 	 */
 	private boolean addSequence(CardSequence sequence, boolean allowUnstability) {
 		if (!allowUnstability && !sequence.isStable()) return false;
-		for(CardSequence seq : this) if(seq == sequence) return false; // no duplicates
+		for (CardSequence seq : this) if (seq == sequence) return false; // no duplicates
 		sequence.addListener(thisListener);
 		cardSequenceList.add(sequence);
 		return true;
@@ -110,7 +110,7 @@ public class CardSequenceTable implements Iterable<CardSequence> {
 	 */
 	public boolean removeSequence(CardSequence sequence) {
 		boolean exists = cardSequenceList.contains(sequence);
-		if(!exists) return false; // cannot remove an inexistent card sequence
+		if (!exists) return false; // cannot remove an inexistent card sequence
 		cardSequenceList.remove(sequence);
 		return true;
 	}
@@ -141,7 +141,7 @@ public class CardSequenceTable implements Iterable<CardSequence> {
 	 * @return iterator that iterates through all of the card
 	 * sequences in the table, which can also be done by the
 	 * {@code for} notation:
-	 * <p>{@code for(CardSequence sequence : cardSequenceTable) {...}}
+	 * <p>{@code for (CardSequence sequence : cardSequenceTable) {...}}
 	 */
 	public Iterator<CardSequence> iterator() {
 		return cardSequenceList.iterator();

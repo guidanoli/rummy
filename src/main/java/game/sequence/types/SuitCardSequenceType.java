@@ -30,8 +30,8 @@ public class SuitCardSequenceType implements CardSequenceType, Comparator<Card> 
 	private SortedSet<Card> sequence = new TreeSet<Card>(this);
 	
 	public boolean canAdd(Card card) {
-		if(sequence.isEmpty()) return true;
-		if(sequence.contains(card)) return false;
+		if (sequence.isEmpty()) return true;
+		if (sequence.contains(card)) return false;
 		Card anyCard = getAnyCard(); // any card from sequence
 		return card.equalRanks(anyCard);
 	}
@@ -53,7 +53,7 @@ public class SuitCardSequenceType implements CardSequenceType, Comparator<Card> 
 		Iterator<Card> iterator = cardSet.iterator();
 		while( iterator.hasNext() ) {
 			Card card = iterator.next();
-			if( !canAdd(card) ) { return false; }
+			if ( !canAdd(card) ) { return false; }
 			add(card);
 		}
 		return true;

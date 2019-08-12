@@ -20,12 +20,12 @@ public class RummyPanel extends JPanel {
 		
 		// Add launch buttons 
 		
-		for( RummyDialogs dialog : RummyDialogs.values() ) {
+		for ( RummyDialogs dialog : RummyDialogs.values() ) {
 			JButton launchBtn = new JButton(dialog.getTitle());
 			launchBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					dialog.getListener().launchFrame();
-					if( dialog.closesParentFrame() ) {
+					if ( dialog.closesParentFrame() ) {
 						disposeListener.disposeFrame();
 					}
 				}

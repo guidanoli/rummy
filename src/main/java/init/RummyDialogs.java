@@ -20,7 +20,7 @@ public enum RummyDialogs {
 			
 			public void launchFrame() {
 				Object frameObj = null;
-				if( frameClass != null ) {
+				if ( frameClass != null ) {
 					try {
 						frameObj = frameClass.newInstance();
 					} catch (Exception e) {

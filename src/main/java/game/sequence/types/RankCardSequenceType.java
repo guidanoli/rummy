@@ -10,15 +10,15 @@ public class RankCardSequenceType implements CardSequenceType {
 	private LinkedList<Card> sequence = new LinkedList<Card>();
 		
 	public CardSequenceBuilder add(Card card) {
-		if( sequence.isEmpty() ) {
+		if ( sequence.isEmpty() ) {
 			sequence.add(card);
 		} else {
 			Card firstCard = sequence.getFirst();
 			int index = card.compareRanks(firstCard);
 			int size = sequence.size();
-			if( index <= 0 ) {
+			if ( index <= 0 ) {
 				sequence.addFirst(card);
-			} else if( index >= size ) {
+			} else if ( index >= size ) {
 				sequence.addLast(card);
 			} else {
 				CardSequenceBuilder builder = split(index);
@@ -30,15 +30,15 @@ public class RankCardSequenceType implements CardSequenceType {
 	}
 	
 	public boolean canAdd(Card card) {
-		if( sequence.isEmpty() ) return true;
+		if ( sequence.isEmpty() ) return true;
 		Card first = sequence.getFirst(); 
-		if( !first.equalSuits(card) ) return false;
+		if ( !first.equalSuits(card) ) return false;
 		Card last = sequence.getLast();
-		if( first.compareRanks(card) < -1 && 
+		if ( first.compareRanks(card) < -1 && 
 			last.compareRanks(card) > 1 ) {
 			return true; // card is in the middle
 		}
-		if( !sequence.contains(card) && // contains(Object) makes use of equals
+		if ( !sequence.contains(card) && // contains(Object) makes use of equals
 			(first.isNeighbour(card) || last.isNeighbour(card)) ) {
 			return true; // card is in one of the corners
 		}
@@ -48,7 +48,7 @@ public class RankCardSequenceType implements CardSequenceType {
 	public CardSequenceBuilder remove(Card card) {
 		int index = getIndex(card);
 		CardSequenceBuilder builder = null;
-		if( canSplit(index) ) {
+		if ( canSplit(index) ) {
 			builder = split(index+1);
 		}
 		sequence.remove(index);
@@ -64,11 +64,11 @@ public class RankCardSequenceType implements CardSequenceType {
 	 * @return index or -1 if not found
 	 */
 	private int getIndex(Card card) {
-		if( sequence.isEmpty() ) return -1;
+		if ( sequence.isEmpty() ) return -1;
 		Card firstCard = sequence.getFirst();
-		if( !firstCard.equalSuits(card) ) return -1;
+		if ( !firstCard.equalSuits(card) ) return -1;
 		int index = card.compareRanks(firstCard);
-		if( index < 0 || index >= size() ) return -1;
+		if ( index < 0 || index >= size() ) return -1;
 		return index;
 	}
 
@@ -76,7 +76,7 @@ public class RankCardSequenceType implements CardSequenceType {
 		int size = size();
 		CardSequenceBuilder builder = new CardSequenceBuilder()
 				.setType(() -> new RankCardSequenceType());
-		for( int i = index; i < size; i++ ) {
+		for ( int i = index; i < size; i++ ) {
 			Card removedCard = sequence.remove(index);
 			builder.addCard(removedCard);
 		}
@@ -98,11 +98,11 @@ public class RankCardSequenceType implements CardSequenceType {
 			Card lowestCard = iterator.next();
 			while( iterator.hasNext() ) {
 				Card currentCard = iterator.next();
-				if( currentCard.compareRanks(lowestCard) < 0 ) {
+				if ( currentCard.compareRanks(lowestCard) < 0 ) {
 					lowestCard = currentCard;
 				}
 			}
-			if( !canAdd(lowestCard) ) {
+			if ( !canAdd(lowestCard) ) {
 				return false;
 			}
 			add(lowestCard);

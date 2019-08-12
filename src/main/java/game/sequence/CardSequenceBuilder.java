@@ -48,7 +48,7 @@ public class CardSequenceBuilder {
 	 * @return this builder
 	 */
 	public CardSequenceBuilder addListenerSet(Set<CardSequenceListener> listenerSet) {
-		for( CardSequenceListener listener : listenerSet ) {
+		for ( CardSequenceListener listener : listenerSet ) {
 			listeners.add(listener);
 		}
 		return this;
@@ -93,13 +93,13 @@ public class CardSequenceBuilder {
 	 * the card sequence would be unstable and instability is not allowed 
 	 */
 	public CardSequence build() {
-		if( sequenceTypeSupplier == null ) throw new IllegalArgumentException("Undefined card sequence type");
+		if ( sequenceTypeSupplier == null ) throw new IllegalArgumentException("Undefined card sequence type");
 		CardSequenceType sequenceType = sequenceTypeSupplier.get();
 		CardSequence cardSequence = new CardSequence(sequenceType);
-		if( !sequenceType.addCardSet(cardSet) || (!allowInstability && !cardSequence.isStable()) ) {
+		if ( !sequenceType.addCardSet(cardSet) || (!allowInstability && !cardSequence.isStable()) ) {
 			throw new IllegalArgumentException("Invalid card sequence");
 		}
-		for( CardSequenceListener listener : listeners ) cardSequence.addListener(listener);
+		for ( CardSequenceListener listener : listeners ) cardSequence.addListener(listener);
 		return cardSequence;
 	}
 		

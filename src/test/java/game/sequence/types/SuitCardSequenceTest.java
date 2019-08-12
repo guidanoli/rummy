@@ -149,11 +149,11 @@ class SuitCardSequenceTest implements CardSequenceListener {
 				};
 				ArrayList<CardSequence> sequences = new ArrayList<CardSequence>();
 				int len = cards.length;
-				for(int i = 0; i < len; i++) {
-					for(int j = 0; j < len; j++) {
-						for(int k = 0; k < len; k++) {
-							for(int l = 0; l < len; l++) {
-								if( i != j && k != i && k != j && l != i && l != j && l != k ) {
+				for (int i = 0; i < len; i++) {
+					for (int j = 0; j < len; j++) {
+						for (int k = 0; k < len; k++) {
+							for (int l = 0; l < len; l++) {
+								if ( i != j && k != i && k != j && l != i && l != j && l != k ) {
 									sequences.add(newSequenceBuilder(listener)
 											.addCard(cards[i]) // first card
 											.addCard(cards[j]) // second card
@@ -165,7 +165,7 @@ class SuitCardSequenceTest implements CardSequenceListener {
 						}
 					}
 				}
-				for(int i = 1; i < sequences.size(); i++) {
+				for (int i = 1; i < sequences.size(); i++) {
 					CardSequence prev = sequences.get(i-1),
 							curr = sequences.get(i);
 					assertEquals(prev, curr,
@@ -321,7 +321,7 @@ class SuitCardSequenceTest implements CardSequenceListener {
 			};
 			boolean [] present = new boolean[n];
 			CardSequence sequence = builder.allowInstability(true).build();
-			for(int i = 0; i < n; i++) {
+			for (int i = 0; i < n; i++) {
 				final int j = i;
 				assertTrue(sequence.addCard(cards[i]),
 						() -> "should add "+cards[j].toString()+" successfully to the sequence");
@@ -329,12 +329,12 @@ class SuitCardSequenceTest implements CardSequenceListener {
 			assertEquals(n, sequence.size(),
 					() -> "it should add "+n+" cards exactly");
 			Iterator<Card> iterator = sequence.iterator();
-			for(int i = 0; i < n; i++) {
+			for (int i = 0; i < n; i++) {
 				assertTrue(iterator.hasNext(),
 						() -> "it should add "+n+" cards exactly");
 				final Card curr = iterator.next(); 
-				for(int j = 0; j < n; j++) {
-					if( cards[j].equals(curr) ) {
+				for (int j = 0; j < n; j++) {
+					if ( cards[j].equals(curr) ) {
 						assertFalse(present[j],
 								() -> "should not have duplicates" );
 						present[j] = true;
@@ -343,7 +343,7 @@ class SuitCardSequenceTest implements CardSequenceListener {
 			}
 			assertFalse(iterator.hasNext(),
 					() -> "it should add "+n+" cards exactly");
-			for(int i = 0; i < present.length; i++) {
+			for (int i = 0; i < present.length; i++) {
 				final Card curr = cards[i];
 				assertTrue(present[i],
 						() -> String.format("should contain card '%s'", curr.toString()));
@@ -482,8 +482,8 @@ class SuitCardSequenceTest implements CardSequenceListener {
 			assertEquals(initialSize - 1, sequence.size(),
 					() -> "should drop down the sequence size by one");
 			CardSequenceBuilder builder = newSequenceBuilder(listener);
-			for(CardSuit cardSuit : CardSuit.values()) {
-				if( !cardSuit.equals(suit) ) {
+			for (CardSuit cardSuit : CardSuit.values()) {
+				if ( !cardSuit.equals(suit) ) {
 					builder.addCard(new Card(rank, cardSuit));
 				}
 			}

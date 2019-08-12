@@ -20,7 +20,7 @@ class CardTest {
 		@Test
 		@DisplayName("when operating on a valid card")
 		void testGetRank() {
-			for( CardRank cardRank : CardRank.values() ) {
+			for ( CardRank cardRank : CardRank.values() ) {
 				assertEquals(new Card(cardRank,CardSuit.SPADES).getRank(), cardRank,
 						() -> "should return its rank");
 			}
@@ -35,7 +35,7 @@ class CardTest {
 		@Test
 		@DisplayName("when operating on a valid card")
 		void testGetSuit() {
-			for( CardSuit cardSuit : CardSuit.values() ) {
+			for ( CardSuit cardSuit : CardSuit.values() ) {
 				assertEquals(new Card(CardRank.ACE, cardSuit).getSuit(), cardSuit,
 						() -> "should return its suit");
 			}
@@ -50,8 +50,8 @@ class CardTest {
 		@Test
 		@DisplayName("should return a string which contains")
 		void testConstains() {
-			for( CardRank cardRank : CardRank.values() ) {
-				for( CardSuit cardSuit : CardSuit.values() ) {
+			for ( CardRank cardRank : CardRank.values() ) {
+				for ( CardSuit cardSuit : CardSuit.values() ) {
 					Card card = new Card(cardRank, cardSuit);
 					String cardString = card.toString(); 
 					assertTrue(cardString.contains(cardRank.toString()),
@@ -72,7 +72,7 @@ class CardTest {
 		@DisplayName("when comparing two cards of the same suit")
 		void testCompareSameSuit() {
 			CardRank firstCardRank = CardRank.SEVEN;
-			for( CardRank secondCardRank : CardRank.values() ) {
+			for ( CardRank secondCardRank : CardRank.values() ) {
 				Card firstCard = new Card(firstCardRank,CardSuit.SPADES);
 				Card secondCard = new Card(secondCardRank,CardSuit.SPADES);
 				assertEquals(
@@ -86,7 +86,7 @@ class CardTest {
 		@DisplayName("when comparing two cards of different suits")
 		void testCompareDifferentSuit() {
 			CardRank firstCardRank = CardRank.SEVEN;
-			for( CardRank secondCardRank : CardRank.values() ) {
+			for ( CardRank secondCardRank : CardRank.values() ) {
 				Card firstCard = new Card(firstCardRank,CardSuit.SPADES);
 				Card secondCard = new Card(secondCardRank,CardSuit.CLUBS);
 				assertEquals(
@@ -106,10 +106,10 @@ class CardTest {
 		@DisplayName("when comparing two cards")
 		void testCompareAllSuits() {
 			CardSuit firstCardSuit = CardSuit.HEARTS;
-			for( CardSuit secondCardSuit : CardSuit.values() ) {
+			for ( CardSuit secondCardSuit : CardSuit.values() ) {
 				Card firstCard = new Card(CardRank.ACE,firstCardSuit);
 				Card secondCard = new Card(CardRank.TWO,secondCardSuit);
-				if( !firstCard.equalSuits(secondCard) ) {
+				if ( !firstCard.equalSuits(secondCard) ) {
 					assertNotEquals( 0,
 							firstCard.compareSuits(secondCard),
 							() -> "should return a value different from zero for different suits");
@@ -131,7 +131,7 @@ class CardTest {
 		@DisplayName("when comparing two cards of the same suit")
 		void testEqualSuits() {
 			CardRank firstCardRank = CardRank.SEVEN;
-			for( CardRank secondCardRank : CardRank.values() ) {
+			for ( CardRank secondCardRank : CardRank.values() ) {
 				Card firstCard = new Card(firstCardRank,CardSuit.SPADES);
 				Card secondCard = new Card(secondCardRank,CardSuit.SPADES);
 				assertTrue(
@@ -144,7 +144,7 @@ class CardTest {
 		@DisplayName("when comparing two cards of different suits")
 		void testDifferentSuits() {
 			CardRank firstCardRank = CardRank.SEVEN;
-			for( CardRank secondCardRank : CardRank.values() ) {
+			for ( CardRank secondCardRank : CardRank.values() ) {
 				Card firstCard = new Card(firstCardRank,CardSuit.SPADES);
 				Card secondCard = new Card(secondCardRank,CardSuit.CLUBS);
 				assertFalse(
@@ -226,8 +226,8 @@ class CardTest {
 		@Test
 		@DisplayName("when hashing the same card")
 		void testHashSame() {		
-			for( CardRank rank : CardRank.values() ) {
-				for( CardSuit suit : CardSuit.values() ) {
+			for ( CardRank rank : CardRank.values() ) {
+				for ( CardSuit suit : CardSuit.values() ) {
 					Card card = new Card(rank,suit);
 					Card otherCard = new Card(rank,suit);
 					assertEquals( card.hashCode(),
@@ -242,11 +242,11 @@ class CardTest {
 		void testHashDifferent() {
 			CardRank [] ranks = CardRank.values();
 			CardSuit [] suits = CardSuit.values();
-			for( int i = 0 ; i < ranks.length; i++ ) {
-				for( int j = 0 ; j < suits.length; j++ ) {
+			for ( int i = 0 ; i < ranks.length; i++ ) {
+				for ( int j = 0 ; j < suits.length; j++ ) {
 					Card firstCard = new Card(ranks[i], suits[j]);
-					for( int k = i+1; k < ranks.length; k++ ) {
-						for( int l = j+1; l < suits.length; l++ ) {
+					for ( int k = i+1; k < ranks.length; k++ ) {
+						for ( int l = j+1; l < suits.length; l++ ) {
 							Card secondCard = new Card(ranks[k], suits[l]);
 							assertNotEquals(firstCard.hashCode(), secondCard.hashCode(),
 									() -> "should return different values");
@@ -265,8 +265,8 @@ class CardTest {
 		@Test
 		@DisplayName("when comparing the same card")
 		void testCompareSame() {
-			for( CardRank rank : CardRank.values() ) {
-				for( CardSuit suit : CardSuit.values() ) {
+			for ( CardRank rank : CardRank.values() ) {
+				for ( CardSuit suit : CardSuit.values() ) {
 					Card card = new Card(rank,suit);
 					Card otherCard = new Card(rank,suit);
 					assertEquals(0, card.compare(otherCard),
@@ -280,11 +280,11 @@ class CardTest {
 		void testCompareDifferent() {
 			CardRank [] ranks = CardRank.values();
 			CardSuit [] suits = CardSuit.values();
-			for( int i = 0 ; i < ranks.length; i++ ) {
-				for( int j = 0 ; j < suits.length; j++ ) {
+			for ( int i = 0 ; i < ranks.length; i++ ) {
+				for ( int j = 0 ; j < suits.length; j++ ) {
 					Card firstCard = new Card(ranks[i], suits[j]);
-					for( int k = i+1; k < ranks.length; k++ ) {
-						for( int l = j+1; l < suits.length; l++ ) {
+					for ( int k = i+1; k < ranks.length; k++ ) {
+						for ( int l = j+1; l < suits.length; l++ ) {
 							Card secondCard = new Card(ranks[k], suits[l]);
 							assertNotEquals(0, firstCard.compare(secondCard),
 									() -> "should not return 0");
